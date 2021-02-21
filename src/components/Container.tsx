@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import Head from 'next/head';
-// import NextLink from 'next/link';
-// import { useRouter } from 'next/router';
 
 interface Props {
   children: React.ReactNode;
@@ -16,16 +14,11 @@ export default function Container({ children }: Props) {
 
   useEffect(() => setMounted(true), []);
 
-  // const router = useRouter();
   const meta = {
     title: 'Georgii Tarasov is a software developer in Ridgebox.com',
     description: `I'm a software developer, speciality coffee enthusiast, and a kinda of entrepreneur. I work in Ridgebox.com and 99sales.io.`,
     image: `${DOMAIN}/banner.png`,
     type: 'website',
-  };
-
-  const router = {
-    asPath: '',
   };
 
   return (
@@ -34,8 +27,8 @@ export default function Container({ children }: Props) {
         <title>{meta.title}</title>
         <meta name="robots" content="follow, index" />
         <meta content={meta.description} name="description" />
-        <meta property="og:url" content={`${DOMAIN}${router.asPath}`} />
-        <link rel="canonical" href={`${DOMAIN}${router.asPath}`} />
+        <meta property="og:url" content={DOMAIN} />
+        <link rel="canonical" href={DOMAIN} />
         <meta property="og:type" content={meta.type} />
         <meta property="og:site_name" content="Georgii Tarasov" />
         <meta property="og:description" content={meta.description} />
@@ -52,13 +45,6 @@ export default function Container({ children }: Props) {
         <nav className="sticky-nav flex justify-between items-center px-4 py-4 my-0 md:my-8 mx-auto bg-white dark:bg-black bg-opacity-60">
           <div>
             <p className="font-bold p-1 sm:p-4 text-gray-900 dark:text-gray-100">{DOMAIN}</p>
-
-            {/* <NextLink href="/">
-              <a className="p-1 sm:p-4 text-gray-900 dark:text-gray-100">Home</a>
-            </NextLink>
-            <NextLink href="/blog">
-              <a className="p-1 sm:p-4 text-gray-900 dark:text-gray-100">Blog</a>
-            </NextLink> */}
           </div>
           <button
             aria-label="Toggle Dark Mode"
