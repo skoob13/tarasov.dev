@@ -3,7 +3,7 @@
   "trailingSlash": false,
   "headers": [
     {
-      "source": "/fonts/(*.)",
+      "source": "/fonts/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
