@@ -8,9 +8,22 @@ export default function Timeline() {
     <div className="mb-16">
       <Year>2021</Year>
       <ul>
+        <TimelineRow title="Organoleptic Course">
+          Did you know that we feel a food taste through the nose? I did not! Anyway, try to feel a taste using your
+          nose. You will definitely find a difference.
+        </TimelineRow>
+        <TimelineRow title="Lundy">
+          <ExternalLink href="https://getlundy.io">Lundy</ExternalLink> helps real estate agents to revolutionize
+          property views using cutting-edge Alexa skills.
+        </TimelineRow>
         <TimelineRow title="Sleuth">
           I finished the development of <ExternalLink href="https://hellosleuth.com">Sleuth</ExternalLink> platform. It
           helps parents to find clues for their children health.
+        </TimelineRow>
+        <TimelineRow title="CSS for JavaScript Developers Course">
+          I was following Josh W Comeau for some time when I would find out about early access the{' '}
+          <ExternalLink href="https://css-for-js.dev/">CSS course</ExternalLink>. So I signed up for the early access,
+          and the course was awesome. In fact, I would recommend to examine this course to every developer.
         </TimelineRow>
         <TimelineRow title="Dynamic Group Therapy">
           I attended a dynamic group therapy. Everybody knows an experience is impossible to replicate. It was the
