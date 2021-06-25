@@ -16,7 +16,7 @@ export default function Container({ children }: Props) {
 
   const meta = {
     title: 'Georgii Tarasov is a software developer in Ridgebox.com',
-    description: `I'm a software developer, speciality coffee enthusiast, and a kinda of entrepreneur. I work in Ridgebox.com and 99sales.io.`,
+    description: `Georgiy is a software developer, speciality coffee enthusiast, and a kinda of entrepreneur. I work in Ridgebox.com and 99sales.io.`,
     image: `${DOMAIN}/banner.png`,
     type: 'website',
   };
