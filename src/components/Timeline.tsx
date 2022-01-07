@@ -8,6 +8,23 @@ export default function Timeline() {
     <div className="mb-16">
       <Year>2021</Year>
       <ul>
+        <TimelineRow title="Learned Rust">
+          Rust is the future of tooling in JavaScript world and I totally agree.
+        </TimelineRow>
+        <TimelineRow title="HappyDragons">
+          <ExternalLink href="https://happydragons.co">HappyDragons</ExternalLink> introduces a new way to buy and care
+          for reptiles. I did my best making the website blazingly fast. Efforts have paid off: the performance metric
+          of real user experience score is 💯 on target devices.
+        </TimelineRow>
+        <TimelineRow title="Dog Father">
+          I became a proud dog father of{' '}
+          <ExternalLink href="https://en.wikipedia.org/wiki/Lagotto_Romagnolo">Lagotto Romagnolo</ExternalLink> puppy.
+          Her name is Brie and she is adorable.
+        </TimelineRow>
+        <TimelineRow title="Closed 99sales">
+          It was my third attempt to create an own product. Unfortunately, I did not found a product-market fit and we
+          decided shutting down the company. However, I have learned a lot about product and engeneering, so no regrets.
+        </TimelineRow>
         <TimelineRow title="Organoleptic Course">
           Did you know that we feel a food taste through the nose? I did not! Anyway, try to feel a taste using your
           nose. You will definitely find a difference.

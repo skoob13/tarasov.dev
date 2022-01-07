@@ -11,9 +11,8 @@ export default function Home() {
         </h1>
         <h2 className="prose text-gray-600 dark:text-gray-400 mb-16">
           I'm a software developer, speciality coffee enthusiast, and a kinda of entrepreneur. I work in{' '}
-          <ExternalLink href="https://ridgebox.com">Ridgebox.com</ExternalLink> as a Front-End Team Lead. Moreover, I
-          have my own startup in fashion {' – '}
-          <ExternalLink href="https://99sales.io">99sales</ExternalLink>.
+          <ExternalLink href="https://ridgebox.com">Ridgebox.com</ExternalLink> as a Front-End Team Lead. In addition, I
+          work on my own products.
         </h2>
         <h3 className="font-bold text-2xl md:text-4xl tracking-tight mb-4 text-black dark:text-white">Bio</h3>
         <p className="prose text-gray-600 dark:text-gray-400 mb-2">
@@ -28,8 +27,7 @@ export default function Home() {
           <ExternalLink href="https://en.wikipedia.org/wiki/Republic_of_Karelia">Karelia</ExternalLink>.
         </p>
         <p className="prose text-gray-600 dark:text-gray-400 mb-16">
-          I'm a big fan of the Facebook and Vercel technologies. By the way, this website was built using Next.js,
-          Preact, and Tailwind CSS.
+          I'm a big fan of web technologies. By the way, this website was built using Next.js, Preact, and Tailwind CSS.
         </p>
         <h3 className="font-bold text-2xl md:text-4xl tracking-tight mb-4 text-black dark:text-white">Links</h3>
         <div className="flex flex-col mb-16">
