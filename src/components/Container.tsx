@@ -43,7 +43,7 @@ export default function Container({ children }: Props) {
       <div className="container max-w-2xl mx-auto">
         <nav className="sticky-nav flex justify-between items-center px-4 py-4 my-0 md:my-8 mx-auto bg-white dark:bg-black bg-opacity-60">
           <div>
-            <span className="font-bold p-1 sm:p-4 text-gray-900 dark:text-gray-100">tarasov.dev</span>
+            <span className="font-bold text-gray-900 dark:text-gray-100">tarasov.dev</span>
           </div>
           <button
             aria-label="Toggle Dark Mode"
