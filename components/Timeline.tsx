@@ -5,7 +5,7 @@ import Year from './Year';
 
 export default function Timeline() {
   return (
-    <div className="mb-16">
+    <div>
       <Year>2021</Year>
       <ul>
         <TimelineRow title="Learned Rust">

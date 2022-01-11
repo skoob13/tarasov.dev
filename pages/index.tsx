@@ -1,54 +1,79 @@
+import Image from 'next/image';
+
 import Container from 'components/Container';
-import ExternalLink from 'components/ExternalLink';
-import Timeline from 'components/Timeline';
+
+const PROJECTS = [
+  {
+    img: '/happydragons.svg',
+    name: 'HappyDragons',
+    description: 'Reptile Marketplace',
+  },
+  {
+    img: '/99.svg',
+    name: '99sales',
+    description: 'Fashion Search Engine',
+  },
+] as const;
 
 export default function Home() {
   return (
     <Container>
       <div className="flex flex-col justify-center items-start mb-16">
-        <h1 className="font-bold text-3xl md:text-6xl tracking-tight my-8 text-gray-900">
+        <h1 className="font-bold text-3xl md:text-6xl tracking-tight mt-8 mb-16 text-gray-900 dark:text-gray-100">
           <span className="text-sky-600">Hello!</span>
-          <br />
-          I develop things for the internet and brew coffee.
+          <br />I bootstrap business and develop things for the internet.
         </h1>
-        <h2 className="prose text-gray-600 dark:text-gray-400 mb-16">
-          I'm a software developer, speciality coffee enthusiast, and a kinda of entrepreneur. I work in{' '}
-          <ExternalLink href="https://ridgebox.com">Ridgebox.com</ExternalLink> as a Front-End Team Lead. In addition, I
-          work on my own products.
-        </h2>
-        <h3 className="font-bold text-2xl md:text-4xl tracking-tight mb-4 text-black dark:text-white">Bio</h3>
-        <p className="prose text-gray-600 dark:text-gray-400 mb-2">
-          Software development is my primary business and hobby. Currently I work in the product accelerator company, so
-          it provides a unique opportunity to work on variety of markets, e.g. fintech, proptech, insurtech, sport,
-          online education and other. During my career I have sucussfully developed and launched 20+ projects.
-        </p>
-        <p className="prose text-gray-600 dark:text-gray-400 mb-2">
-          I live in Saint Petersburg, Russia. In my spare time I enjoy contributing to open source projects, launching
-          drones to sky, travelling around <span className="crossed">the world</span> Russia (ykwim),{' '}
-          <ExternalLink href="https://en.wikipedia.org/wiki/Leningrad_Oblast">Leningrad Oblast</ExternalLink> and{' '}
-          <ExternalLink href="https://en.wikipedia.org/wiki/Republic_of_Karelia">Karelia</ExternalLink>.
-        </p>
-        <p className="prose text-gray-600 dark:text-gray-400 mb-16">
-          I'm a big fan of web technologies. By the way, this website was built using Next.js, Preact, and Tailwind CSS.
-        </p>
-        <h3 className="font-bold text-2xl md:text-4xl tracking-tight mb-4 text-black dark:text-white">Links</h3>
-        <div className="flex flex-col mb-16">
-          <p className="prose mb-2">
-            📸 <ExternalLink href="https://instagram.com/tarasovg">instagram</ExternalLink>
-          </p>
-          <p className="prose mb-2">
-            👨‍💻 <ExternalLink href="https://github.com/skoob13">github</ExternalLink>
-          </p>
-          <p className="prose">
-            📝 <ExternalLink href="https://twitter.com/anottoday">twitter</ExternalLink>
-          </p>
+        <div className="w-full mb-16">
+          <h2 className="font-bold text-xl md:text-3xl tracking-tight mb-4 text-gray-900 dark:text-white">Writing</h2>
+          <ul className="flex flex-col">
+            <li>
+              <a className="flex flex-col bg-gray-50 rounded-lg p-6 dark:bg-gray-800 dark:highlight-white/5 hover:scale-[1.01] transition-all">
+                <div className="flex items-center">
+                  <h3 className="text-base text-gray-900 font-semibold dark:text-gray-300 flex-1 line-clamp-1 mr-1">
+                    Styling Solutions in Next.js
+                  </h3>
+                  <figure className="flex items-center gap-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 fill-gray-900 dark:fill-gray-300"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <figcaption className="text-base text-gray-900 font-semibold dark:text-gray-300">5 min</figcaption>
+                  </figure>
+                </div>
+                <span className="text-sm text-gray-500 dark:text-gray-400 mt-1">Published on 20.01.2022</span>
+              </a>
+            </li>
+          </ul>
         </div>
-        <h3 className="font-bold text-2xl md:text-4xl tracking-tight mb-4 text-black dark:text-white">Timeline</h3>
-        <Timeline />
-        <p className="prose text-xl text-black dark:text-white">
-          <span className="font-bold">Get in touch: </span>
-          <a href="mailto:gtarasov.work@gmail.com">gtarasov.work@gmail.com</a>.
-        </p>
+        <div className="w-full">
+          <h2 className="font-bold text-xl md:text-3xl tracking-tight mb-4 text-gray-900 dark:text-white">Projects</h2>
+          <ul className="grid grid-cols-2 gap-2">
+            {PROJECTS.map((project) => (
+              <li
+                className="bg-gray-50 rounded-lg p-6 dark:bg-gray-800 dark:highlight-white/5 hover:scale-[1.01] transition-all"
+                key={project.img}
+              >
+                <figure className="flex items-center">
+                  <div className="w-8 mr-4 flex items-center">
+                    <Image src={project.img} width={48} height={54} alt="HappyDragons Logo" />
+                  </div>
+                  <figcaption>
+                    <h3 className="text-base text-gray-900 font-semibold dark:text-gray-300 flex-1">{project.name}</h3>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">{project.description}</span>
+                  </figcaption>
+                </figure>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </Container>
   );
