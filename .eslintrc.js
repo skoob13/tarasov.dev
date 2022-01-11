@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const folders = fs
-  .readdirSync('src', { withFileTypes: true })
+  .readdirSync('./', { withFileTypes: true })
   .filter((dirent) => dirent.isDirectory())
   .map((dirent) => dirent.name);
 

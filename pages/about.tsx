@@ -2,17 +2,16 @@ import Container from 'components/Container';
 import ExternalLink from 'components/ExternalLink';
 import Timeline from 'components/Timeline';
 
-export default function Home() {
+export default function AboutPage() {
   return (
     <Container>
       <div className="flex flex-col justify-center items-start mb-16">
         <h1 className="font-bold text-3xl md:text-6xl tracking-tight my-8 text-gray-900">
           <span className="text-sky-600">Hello!</span>
-          <br />
-          I develop things for the internet and brew coffee.
+          <br />I develop things for the internet and brew coffee.
         </h1>
         <h2 className="prose text-gray-600 dark:text-gray-400 mb-16">
-          I'm a software developer, speciality coffee enthusiast, and a kinda of entrepreneur. I work in{' '}
+          I&rsquoe;m a software developer, speciality coffee enthusiast, and a kinda of entrepreneur. I work in{' '}
           <ExternalLink href="https://ridgebox.com">Ridgebox.com</ExternalLink> as a Front-End Team Lead. In addition, I
           work on my own products.
         </h2>
