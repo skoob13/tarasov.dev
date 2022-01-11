@@ -13,6 +13,11 @@ const PROJECTS = [
     name: '99sales',
     description: 'Fashion Search Engine',
   },
+  {
+    img: '/hellosleuth.svg',
+    name: 'Sleuth',
+    description: 'Find clues for child’s health',
+  },
 ] as const;
 
 export default function Home() {
@@ -21,7 +26,8 @@ export default function Home() {
       <div className="flex flex-col justify-center items-start mb-16">
         <h1 className="font-bold text-3xl md:text-6xl tracking-tight mt-8 mb-16 text-gray-900 dark:text-gray-100">
           <span className="text-sky-600">Hello!</span>
-          <br />I bootstrap business and develop things for the internet.
+          <br />
+          I' bootstrap business and develop things for the internet.
         </h1>
         <div className="w-full mb-16">
           <h2 className="font-bold text-xl md:text-3xl tracking-tight mb-4 text-gray-900 dark:text-white">Writing</h2>
