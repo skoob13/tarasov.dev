@@ -9,9 +9,9 @@ import type { Blog } from '.contentlayer/types';
 export default function BlogLayout({ children, post }: PropsWithChildren<{ post: Blog }>) {
   return (
     <Container
-      title={`${post.title} – Lee Robinson`}
+      title={`${post.title} – Georgiy Tarasov`}
       description={post.summary}
-      image={`https://leerob.io${post.image}`}
+      // image={`https://leerob.io${post.image}`}
       // date={new Date(post.publishedAt).toISOString()}
       type="article"
     >
@@ -21,7 +21,7 @@ export default function BlogLayout({ children, post }: PropsWithChildren<{ post:
           <div className="flex items-center">
             <Image alt="Lee Robinson" height={24} width={24} src="/avatar.jpg" className="rounded-full" />
             <p className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-              {'Lee Robinson / '}
+              {'Georgiy Tarasov / '}
               {/* {format(parseISO(post.publishedAt), 'MMMM dd, yyyy')} */}
             </p>
           </div>

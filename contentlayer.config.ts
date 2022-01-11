@@ -32,6 +32,7 @@ const Blog = defineDocumentType(() => ({
   bodyType: 'mdx',
   fields: {
     title: { type: 'string', required: true },
+    publishedAt: { type: 'date', required: true },
   },
   computedFields,
 }));

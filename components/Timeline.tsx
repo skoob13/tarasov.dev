@@ -87,8 +87,8 @@ export default function Timeline() {
       <Year>2018</Year>
       <ul>
         <TimelineRow title="Eurotip 🚙">
-          If you haven't seen the movie "Eurotip", you would better do it ASAP. I visited Germany, Netherlands, France,
-          Switzerland and Italy in 12 days on Mazda CX-5.
+          If you haven&rsquo;t seen the movie &ldquo;Eurotip&rdquo;, you would better do it ASAP. I visited Germany,
+          Netherlands, France, Switzerland and Italy in 12 days on Mazda CX-5.
         </TimelineRow>
         <TimelineRow title="Italy">
           I had a 9-days trip to Italy. We visited Rome – the cradle of history. Afterwards, we did a sunbathing in
