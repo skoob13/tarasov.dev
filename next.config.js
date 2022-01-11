@@ -1,7 +1,14 @@
-module.exports = {
-  eslint: {
-    ignoreDuringBuilds: true,
+const { withContentlayer } = require('next-contentlayer');
+
+/**
+ * @type {import('next').NextConfig}
+ */
+module.exports = withContentlayer()({
+  typescript: {
+    ignoreBuildErrors: true,
   },
+  swcMinify: true,
+  reactStrictMode: true,
   webpack: (config, { dev, isServer }) => {
     if (!dev && !isServer) {
       Object.assign(config.resolve.alias, {
@@ -13,4 +20,4 @@ module.exports = {
 
     return config;
   },
-};
+});

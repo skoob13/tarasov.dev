@@ -1,7 +1,7 @@
 import 'styles/globals.css';
 import React from 'react';
-import { ThemeProvider } from 'next-themes';
 import { AppProps } from 'next/app';
+import { ThemeProvider } from 'next-themes';
 
 export default function App({ Component, pageProps }: AppProps) {
   React.useEffect(() => {
