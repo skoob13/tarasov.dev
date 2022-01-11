@@ -2,13 +2,14 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { useMDXComponent } from 'next-contentlayer/hooks';
 
 import BlogLayout from 'layouts/BlogLayout';
+import { formatDate } from 'lib/date';
+import { BlogPost } from 'types';
 
 // import components from 'components/MDXComponents';
 import { allBlogs } from '.contentlayer/data';
-import type { Blog } from '.contentlayer/types';
 
 interface Props {
-  post: Blog;
+  post: BlogPost;
 }
 
 export default function Post({ post }: Props) {
@@ -28,5 +29,13 @@ export const getStaticPaths: GetStaticPaths = () => ({
 
 export const getStaticProps: GetStaticProps<Props> = ({ params }) => {
   const post = allBlogs.find((post) => post.slug === params?.slug)!;
-  return { props: { post } };
+
+  return {
+    props: {
+      post: {
+        ...post,
+        publishedAtFormatted: formatDate(post.publishedAt),
+      },
+    },
+  };
 };

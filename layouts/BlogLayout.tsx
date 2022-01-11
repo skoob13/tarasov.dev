@@ -1,32 +1,24 @@
-import { format, parseISO } from 'date-fns';
-import Image from 'next/image';
-import type { PropsWithChildren } from 'react';
+import Head from 'next/head';
 
 import Container from 'components/Container';
+import { BlogPost } from 'types';
 
-import type { Blog } from '.contentlayer/types';
+interface Props {
+  children: React.ReactChild;
+  post: BlogPost;
+}
 
-export default function BlogLayout({ children, post }: PropsWithChildren<{ post: Blog }>) {
+export default function BlogLayout({ children, post }: Props) {
   return (
-    <Container
-      title={`${post.title} – Georgiy Tarasov`}
-      description={post.summary}
-      // image={`https://leerob.io${post.image}`}
-      // date={new Date(post.publishedAt).toISOString()}
-      type="article"
-    >
+    <Container title={`${post.title} – Georgiy Tarasov`} description={post.summary} image={post.image} type="article">
+      <Head>{post.publishedAt && <meta property="article:published_time" content={post.publishedAt} />}</Head>
       <article className="flex flex-col items-start justify-center w-full max-w-2xl mx-auto mb-16">
-        <h1 className="mb-4 text-3xl font-bold tracking-tight text-black md:text-5xl dark:text-white">{post.title}</h1>
-        <div className="flex flex-col items-start justify-between w-full mt-2 md:flex-row md:items-center">
-          <div className="flex items-center">
-            <Image alt="Lee Robinson" height={24} width={24} src="/avatar.jpg" className="rounded-full" />
-            <p className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-              {'Georgiy Tarasov / '}
-              {/* {format(parseISO(post.publishedAt), 'MMMM dd, yyyy')} */}
-            </p>
-          </div>
-          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 min-w-32 md:mt-0">{post.readingTime.text}</p>
-        </div>
+        <h1 className="font-bold text-3xl md:text-5xl tracking-tight mb-4 text-gray-900 dark:text-gray-100">
+          {post.title}
+        </h1>
+        <p className="text-sm text-gray-700 dark:text-gray-300 mr-2 mt-2">
+          {post.publishedAtFormatted} / {post.readingTime.text}
+        </p>
         <div className="w-full mt-4 prose dark:prose-dark max-w-none">{children}</div>
       </article>
     </Container>

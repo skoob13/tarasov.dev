@@ -1,9 +1,9 @@
-import { isSameYear, parseISO } from 'date-fns';
 import { GetStaticProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import Container from 'components/Container';
+import { formatDate } from 'lib/date';
 
 import { allBlogs } from '.contentlayer/data';
 
@@ -12,31 +12,14 @@ interface Props {
 }
 
 export const getStaticProps: GetStaticProps<Props> = () => {
-  const formatter = new Intl.DateTimeFormat('en-GB', {
-    month: 'long',
-    day: 'numeric',
-  });
-
-  const formatterWithYear = new Intl.DateTimeFormat('en-GB', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  });
-
   return {
     props: {
-      posts: allBlogs.slice(0, 3).map((blog) => {
-        const publishedAt = parseISO(blog.publishedAt);
-
-        return {
-          slug: blog.slug,
-          title: blog.title,
-          readingTime: blog.readingTime.text,
-          publishedAt: isSameYear(new Date(), publishedAt)
-            ? formatter.format(publishedAt)
-            : formatterWithYear.format(publishedAt),
-        };
-      }),
+      posts: allBlogs.slice(0, 3).map((blog) => ({
+        slug: blog.slug,
+        title: blog.title,
+        readingTime: blog.readingTime.text,
+        publishedAt: formatDate(blog.publishedAt),
+      })),
     },
   };
 };

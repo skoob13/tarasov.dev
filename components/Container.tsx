@@ -2,28 +2,42 @@ import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useTheme } from 'next-themes';
 
 import ExternalLink from './ExternalLink';
 
 interface Props {
   children: React.ReactNode;
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: string;
 }
 
 const DOMAIN = process.env.NEXT_PUBLIC_DOMAIN;
 
-export default function Container({ children }: Props) {
+export default function Container({ children, image, ...customMeta }: Props) {
+  const router = useRouter();
+
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 
   useEffect(() => setMounted(true), []);
 
   const meta = {
-    title: 'Georgii Tarasov is a software developer in Ridgebox.com',
-    description: `Georgiy is a software developer, speciality coffee enthusiast, and a kinda of entrepreneur. I work in Ridgebox.com and 99sales.io.`,
-    image: `${DOMAIN}/banner.png`,
+    title: 'Georgiy Tarasov – developer, creator, entrepreneur.',
+    description: `Georgii is a software developer, speciality coffee enthusiast, and a kinda of entrepreneur. I work in Ridgebox.com and do bootstrapped business.`,
+    image: `${DOMAIN}/${image || 'banner.png'}`,
     type: 'website',
+    ...customMeta,
   };
+
+  let canonicalUrl = new URL(router.asPath, DOMAIN).href;
+
+  if (canonicalUrl.endsWith('/')) {
+    canonicalUrl = canonicalUrl.slice(0, canonicalUrl.length - 1);
+  }
 
   return (
     <div className="container max-w-2xl mx-auto min-h-screen flex flex-col">
@@ -31,10 +45,10 @@ export default function Container({ children }: Props) {
         <title>{meta.title}</title>
         <meta name="robots" content="follow, index" />
         <meta content={meta.description} name="description" />
-        <meta property="og:url" content={DOMAIN} />
-        <link rel="canonical" href={DOMAIN} />
+        <meta property="og:url" content={canonicalUrl} />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:type" content={meta.type} />
-        <meta property="og:site_name" content="Georgii Tarasov" />
+        <meta property="og:site_name" content="Georgiy Tarasov" />
         <meta property="og:description" content={meta.description} />
         <meta property="og:title" content={meta.title} />
         <meta property="og:image" content={meta.image} />
