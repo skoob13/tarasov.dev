@@ -8,7 +8,7 @@ export default function AboutPage() {
       <div className="flex flex-col justify-center items-start">
         <h1 className="font-bold text-3xl md:text-6xl tracking-tight mt-8 mb-8">About</h1>
         <h2 className="prose dark:prose-dark mb-8 sm:mb-16">
-          I&rsquo;m a software developer, speciality coffee enthusiast, and a kinda of entrepreneur. I work in{' '}
+          I&rsquo;m a software developer, speciality coffee enthusiast, and a kinda entrepreneur. I work in{' '}
           <ExternalLink href="https://ridgebox.com">Ridgebox.com</ExternalLink> as a Front-End Team Lead. In addition, I
           work on my own products.
         </h2>
