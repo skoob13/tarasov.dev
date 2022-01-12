@@ -9,15 +9,20 @@ export interface SmallerBlogPost {
 
 interface Props {
   post: SmallerBlogPost;
+  clampLines?: boolean;
 }
 
-export default function BlogCard({ post }: Props) {
+export default function BlogCard({ post, clampLines }: Props) {
   return (
     <li>
-      <Link href={`/blog/${post.slug}`}>
+      <Link href={`/blog/${post.slug}`} prefetch={false}>
         <a className="flex flex-col bg-gray-50 rounded-lg p-6 dark:bg-gray-800 dark:highlight-white/5 hover:ring-1 ring-gray-300 transition-all">
           <div className="flex items-center">
-            <h3 className="text-base font-semibold dark:text-gray-300 flex-1 line-clamp-1 mr-1">{post.title}</h3>
+            <h3
+              className={`text-base font-semibold dark:text-gray-300 flex-1 mr-1${clampLines ? ' line-clamp-1' : ''}`}
+            >
+              {post.title}
+            </h3>
             <figure className="flex items-center gap-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
