@@ -1,37 +1,20 @@
 import 'styles/globals.css';
 import React from 'react';
 import { AppProps } from 'next/app';
+import Script from 'next/script';
 import { ThemeProvider } from 'next-themes';
 
 export default function App({ Component, pageProps }: AppProps) {
-  React.useEffect(() => {
-    if (typeof window !== undefined) {
-      const ga = {
-        data: {
-          v: '1',
-          tid: 'G-HEGY6G668W',
-          cid: `${Date.now()}${Math.random()}`,
-          dl: window.location.href,
-          aip: '1',
-        },
-        send(additionalParams: { [key: string]: string }) {
-          navigator.sendBeacon(
-            'https://google-analytics.com/collect',
-            new URLSearchParams({
-              ...this.data,
-              ...additionalParams,
-            }).toString()
-          );
-        },
-      };
-
-      ga.send({ t: 'pageview' });
-    }
-  }, []);
-
   return (
     <ThemeProvider attribute="class">
       <Component {...pageProps} />
+      {process.env.NODE_ENV === 'production' && (
+        <Script
+          strategy="afterInteractive"
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token": "18dccd60742a42de819e456e99bd48f7"}'
+        />
+      )}
     </ThemeProvider>
   );
 }
