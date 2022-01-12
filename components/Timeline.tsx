@@ -71,8 +71,8 @@ export default function Timeline() {
           We decided to suspend our startup studio to focus on a single project. Nevertheless, we had a exceptional
           experience working with fintech and insurtech projects. E.g. a neobank on Singapore market{' '}
           <ExternalLink href="https://www.crunchbase.com/organization/kubia">Kubia</ExternalLink>, the leading on
-          Russian insurance market <ExternalLink>El-Market</ExternalLink> platform, and a project for the largest bank
-          in Russia <ExternalLink href="https://sber.ru">Sber</ExternalLink>.
+          Russian insurance market <ExternalLink href="https://el-market.pro">El-Market</ExternalLink> platform, and a
+          project for the largest bank in Russia <ExternalLink href="https://sber.ru">Sber</ExternalLink>.
         </TimelineRow>
       </ul>
       <Divider />
