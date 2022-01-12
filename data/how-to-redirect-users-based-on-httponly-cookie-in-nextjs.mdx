@@ -1,0 +1,43 @@
+---
+title: How to Redirect Users Based on httpOnly Cookie in Next.js
+seoTitle: How to Redirect Users Based on httpOnly Cookie in Next.js
+summary: Redirect authenticated or unauthenticated users based on httpOnly cookie in Next.js using the middleware.
+publishedAt: 2022-01-12
+isPublished: true
+---
+
+The best practice is to store token or session identifier in a `httpOnly` cookie. However, the cookie itself becomes available only for server side. Since we cannot get a cookie using JavaScript there is a problem handling authentication cases on client side be such as:
+- Redirecting a user from anonymous pages if they have a session or token. For example, sign in or sign up pages.
+- Redirecting a user from authenticated pages if they don't have a session or token. For example, dashboard page.
+
+If you have private static generated pages (using `getStaticProps`) there will be even more problems with a flash of prerendered static HTML or unexpected behavior after a page becomes interactive. To resolve the issue you can render the page on server side using `getServerSideProps` but why would you compromise a performance of static page?
+
+New [middleware](https://nextjs.org/docs/middleware) helps to resolve complicated cases. It runs directly on Edge without a cold start what makes this story really fast. Using middleware you could write code over configuration. In other words, modify a request before reaching the Next.js server. Common cases are rewrites, redirects, handling cookies and headers, and etc. Since it runs on server you have full access to `httpOnly` cookies as well.
+
+The first case is redirecting users from anonymous pages if they have a session. Let's create a new global middleware in `pages/_middleware.ts`:
+```typescript
+import { NextRequest, NextResponse } from 'next/server';
+
+export function middleware(req: NextRequest) {
+  if (req.nextUrl.pathname.match(/\/(signin|signup).*/) && req.cookies.sessionid) {
+    return NextResponse.redirect('/', 307);
+  }
+}
+```
+
+If a request tries to open `/signin` or `/signup` page and there is a session cookie, it will redirect to the main page (in my case it is `/` route). I use the **307** status code because browser should not cache a result of request so the [temporary redirect](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/307) is what we need.
+
+The second case is redirecting users from private pages:
+
+```typescript
+import { NextRequest, NextResponse } from 'next/server';
+
+export function middleware(req: NextRequest) {
+  if (req.nextUrl.pathname.startsWith('/admin') && !req.cookies.sessionid) {
+    return NextResponse.redirect('/signin', 307);
+  }
+}
+```
+Request will be redirected to `/signin` page, if a requested url starts with `/admin` and there is not the `sessionid` cookie.
+
+Middleware is powerful feature of Next.js. Check out [official examples](https://nextjs.org/docs/middleware#examples) in the documentation. One of my favorites is the [simple implementation](https://github.com/rauchg/wordledge) of Wordle game.

@@ -2,7 +2,7 @@ import { GetStaticProps } from 'next';
 
 import BlogCard, { SmallerBlogPost } from 'components/BlogCard';
 import Container from 'components/Container';
-import { formatDate } from 'lib/date';
+import { getBlogPostPreviews } from 'lib/blog';
 
 import { allBlogs } from '.contentlayer/data';
 
@@ -13,12 +13,7 @@ interface Props {
 export const getStaticProps: GetStaticProps<Props> = () => {
   return {
     props: {
-      posts: allBlogs.map((blog) => ({
-        slug: blog.slug,
-        title: blog.title,
-        readingTime: blog.readingTime.text,
-        publishedAt: formatDate(blog.publishedAt),
-      })),
+      posts: getBlogPostPreviews(allBlogs),
     },
   };
 };
