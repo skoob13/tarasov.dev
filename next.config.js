@@ -4,8 +4,8 @@ const { withContentlayer } = require('next-contentlayer');
  * @type {import('next').NextConfig}
  */
 module.exports = withContentlayer()({
-  typescript: {
-    ignoreBuildErrors: true,
+  images: {
+    formats: ['image/avif', 'image/webp'],
   },
   swcMinify: true,
   reactStrictMode: true,
