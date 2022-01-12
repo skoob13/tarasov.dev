@@ -17,7 +17,7 @@ export default function BlogLayout({ children, post }: Props) {
         <p className="text-sm text-gray-700 dark:text-gray-300 mr-2 mt-2">
           {post.publishedAtFormatted} / {post.readingTime.text}
         </p>
-        <div className="w-full mt-4 prose dark:prose-inverted max-w-none">{children}</div>
+        <div className="w-full mt-8 prose dark:prose-invert max-w-none">{children}</div>
       </article>
     </Container>
   );
