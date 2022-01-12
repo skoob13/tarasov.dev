@@ -2,7 +2,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { useMDXComponent } from 'next-contentlayer/hooks';
 
 import BlogLayout from 'layouts/BlogLayout';
-import { processBlogPost } from 'lib/blog';
+import { getBlogPostPreviews, processBlogPost } from 'lib/blog';
 import { BlogPost } from 'types';
 
 // import components from 'components/MDXComponents';
@@ -24,7 +24,7 @@ export default function Post({ post }: Props) {
 
 export const getStaticPaths: GetStaticPaths = () => {
   return {
-    paths: allBlogs.map((blog) => ({
+    paths: getBlogPostPreviews(allBlogs).map((blog) => ({
       params: {
         slug: blog.slug,
       },

@@ -159,6 +159,11 @@
     ts-pattern "^3.3.3"
     type-fest "^1.2.1"
 
+"@corex/deepmerge@^2.6.148":
+  version "2.6.148"
+  resolved "https://registry.yarnpkg.com/@corex/deepmerge/-/deepmerge-2.6.148.tgz#8fa825d53ffd1cbcafce1b6a830eefd3dcc09dd5"
+  integrity sha512-6QMz0/2h5C3ua51iAnXMPWFbb1QOU1UvSM4bKBw5mzdT+WtLgjbETBBIQZ+Sh9WvEcGwlAt/DEdRpIC3XlDBMA==
+
 "@effect-ts/core@^0.48.2":
   version "0.48.6"
   resolved "https://registry.yarnpkg.com/@effect-ts/core/-/core-0.48.6.tgz#bf9264cc62ad1d1617e5c300ab98763847cb8db4"
@@ -3968,6 +3973,14 @@ next-contentlayer@^0.0.33:
     "@contentlayer/core" "0.0.33"
     "@contentlayer/utils" "0.0.33"
     rxjs "^7.1.0"
+
+next-sitemap@^1.8.7:
+  version "1.8.7"
+  resolved "https://registry.yarnpkg.com/next-sitemap/-/next-sitemap-1.8.7.tgz#80a09fa36c104d019942a6195be3cfee5cfb52cb"
+  integrity sha512-Vd4Qo/FlOa3DfqoHwdY3KaIN5Qke4zde735lpq9V7LKbNWp4mZMLG0XMsAMV9EyxwB9iHENLIcVVnPwJKQPf9A==
+  dependencies:
+    "@corex/deepmerge" "^2.6.148"
+    minimist "^1.2.5"
 
 next-themes@^0.0.14:
   version "0.0.14"
