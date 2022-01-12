@@ -73,7 +73,13 @@ export default function Home({ posts }: Props) {
                 <figure className="flex items-center">
                   <div className="w-8 mr-4 flex items-center">
                     {typeof project.img === 'string' ? (
-                      <Image src={project.img} width={48} height={54} alt={`${project.name} Logo`} />
+                      <Image
+                        src={project.img}
+                        width={48}
+                        height={48}
+                        alt={`${project.name} Logo`}
+                        objectFit="contain"
+                      />
                     ) : (
                       project.img
                     )}
