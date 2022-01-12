@@ -12,7 +12,7 @@ export default function AboutPage() {
           <ExternalLink href="https://ridgebox.com">Ridgebox.com</ExternalLink> as a Front-End Team Lead. In addition, I
           work on my own products.
         </h2>
-        <h3 className="font-bold text-xl md:text-3xl tracking-tight mb-4 ">Bio</h3>
+        <h3 className="font-bold text-xl md:text-3xl tracking-tight mb-4">Bio</h3>
         <p className="prose dark:prose-dark mb-2">
           Software development is my primary business and hobby. Currently I work in the product accelerator company, so
           it provides a unique opportunity to work on variety of markets, e.g. fintech, proptech, insurtech, sport,
@@ -28,7 +28,7 @@ export default function AboutPage() {
           I&rsquo;m a big fan of web technologies. By the way, this website was built using Next.js, Preact, and
           Tailwind CSS.
         </p>
-        <h3 className="font-bold text-xl md:text-3xl tracking-tight mb-4 ">Links</h3>
+        <h3 className="font-bold text-xl md:text-3xl tracking-tight mb-4">Links</h3>
         <ul className="flex flex-col mb-8 sm:mb-16 gap-2">
           <li className="prose dark:prose-dark">
             📸 <ExternalLink href="https://instagram.com/tarasovg">instagram</ExternalLink>
@@ -43,7 +43,7 @@ export default function AboutPage() {
             📧 <ExternalLink href="mailto:gtarasov.work@gmail.com">email</ExternalLink>
           </li>
         </ul>
-        <h3 className="font-bold text-xl md:text-3xl tracking-tight mb-4 ">Timeline</h3>
+        <h3 className="font-bold text-xl md:text-3xl tracking-tight mb-4">Timeline</h3>
         <Timeline />
       </div>
     </Container>
