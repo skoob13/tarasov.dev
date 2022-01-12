@@ -15,7 +15,7 @@ export default function BlogCard({ post }: Props) {
   return (
     <li>
       <Link href={`/blog/${post.slug}`}>
-        <a className="flex flex-col bg-gray-50 rounded-lg p-6 dark:bg-gray-800 dark:highlight-white/5 hover:scale-[1.01] transition-all">
+        <a className="flex flex-col bg-gray-50 rounded-lg p-6 dark:bg-gray-800 dark:highlight-white/5 hover:ring-1 ring-gray-300 transition-all">
           <div className="flex items-center">
             <h3 className="text-base text-gray-900 font-semibold dark:text-gray-300 flex-1 line-clamp-1 mr-1">
               {post.title}

@@ -6,8 +6,10 @@ export default function AboutPage() {
   return (
     <Container>
       <div className="flex flex-col justify-center items-start">
-        <h1 className="font-bold text-2xl md:text-4xl tracking-tight mb-4 text-gray-900 dark:text-white">About</h1>
-        <h2 className="prose text-gray-600 dark:text-gray-400 mb-16">
+        <h1 className="mt-8 sm:mt-0 font-bold text-2xl md:text-4xl tracking-tight mb-4 text-gray-900 dark:text-white">
+          About
+        </h1>
+        <h2 className="prose text-gray-600 dark:text-gray-400 mb-8 sm:mb-16">
           I&rsquo;m a software developer, speciality coffee enthusiast, and a kinda of entrepreneur. I work in{' '}
           <ExternalLink href="https://ridgebox.com">Ridgebox.com</ExternalLink> as a Front-End Team Lead. In addition, I
           work on my own products.
@@ -24,12 +26,12 @@ export default function AboutPage() {
           <ExternalLink href="https://en.wikipedia.org/wiki/Leningrad_Oblast">Leningrad Oblast</ExternalLink> and{' '}
           <ExternalLink href="https://en.wikipedia.org/wiki/Republic_of_Karelia">Karelia</ExternalLink>.
         </p>
-        <p className="prose text-gray-600 dark:text-gray-400 mb-16">
+        <p className="prose text-gray-600 dark:text-gray-400 mb-8 sm:mb-16">
           I&rsquo;m a big fan of web technologies. By the way, this website was built using Next.js, Preact, and
           Tailwind CSS.
         </p>
         <h3 className="font-bold text-xl md:text-3xl tracking-tight mb-4 text-gray-900 dark:text-white">Links</h3>
-        <ul className="flex flex-col mb-16 gap-2">
+        <ul className="flex flex-col mb-8 sm:mb-16 gap-2">
           <li className="prose">
             📸 <ExternalLink href="https://instagram.com/tarasovg">instagram</ExternalLink>
           </li>
