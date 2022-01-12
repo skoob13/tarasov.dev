@@ -28,7 +28,7 @@ export default function Container({ children, image, ...customMeta }: Props) {
   const meta = {
     title: 'Georgiy Tarasov – developer, creator, entrepreneur.',
     description: `Georgii is a software developer, speciality coffee enthusiast, and a kinda of entrepreneur. I work in Ridgebox.com and do bootstrapped business.`,
-    image: `${DOMAIN}/${image || 'banner.png'}`,
+    image: `${DOMAIN}/${image || 'og-banner.jpg'}`,
     type: 'website',
     ...customMeta,
   };
