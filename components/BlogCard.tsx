@@ -17,9 +17,7 @@ export default function BlogCard({ post }: Props) {
       <Link href={`/blog/${post.slug}`}>
         <a className="flex flex-col bg-gray-50 rounded-lg p-6 dark:bg-gray-800 dark:highlight-white/5 hover:ring-1 ring-gray-300 transition-all">
           <div className="flex items-center">
-            <h3 className="text-base text-gray-900 font-semibold dark:text-gray-300 flex-1 line-clamp-1 mr-1">
-              {post.title}
-            </h3>
+            <h3 className="text-base font-semibold dark:text-gray-300 flex-1 line-clamp-1 mr-1">{post.title}</h3>
             <figure className="flex items-center gap-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -33,9 +31,7 @@ export default function BlogCard({ post }: Props) {
                   clipRule="evenodd"
                 />
               </svg>
-              <figcaption className="text-base text-gray-900 font-semibold dark:text-gray-300">
-                {post.readingTime}
-              </figcaption>
+              <figcaption className="text-base font-semibold dark:text-gray-300">{post.readingTime}</figcaption>
             </figure>
           </div>
           <span className="text-sm text-gray-500 dark:text-gray-400 mt-1">Published on {post.publishedAt}</span>

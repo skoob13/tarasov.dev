@@ -55,14 +55,12 @@ export default function Home({ posts }: Props) {
   return (
     <Container>
       <div className="flex flex-col justify-center items-start mb-16">
-        <h1 className="font-bold text-3xl md:text-6xl tracking-tight mt-8 mb-16 text-gray-900 dark:text-gray-100">
+        <h1 className="font-bold text-3xl md:text-6xl tracking-tight mt-8 mb-16 ">
           <span className="text-sky-600">Hello!</span>
           <br />I bootstrap business and develop things for the Internet.
         </h1>
         <div className="w-full mb-16">
-          <h2 className="font-bold text-xl md:text-3xl tracking-tight mb-4 text-gray-900 dark:text-gray-100">
-            Writing
-          </h2>
+          <h2 className="font-bold text-xl md:text-3xl tracking-tight mb-4 ">Writing</h2>
           <ul className="flex flex-col">
             {posts.map((post) => (
               <BlogCard key={post.slug} post={post} />
@@ -70,7 +68,7 @@ export default function Home({ posts }: Props) {
           </ul>
         </div>
         <div className="w-full">
-          <h2 className="font-bold text-xl md:text-3xl tracking-tight mb-4 text-gray-900 dark:text-white">Projects</h2>
+          <h2 className="font-bold text-xl md:text-3xl tracking-tight mb-4 ">Projects</h2>
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {PROJECTS.map((project) => (
               <li
@@ -86,7 +84,7 @@ export default function Home({ posts }: Props) {
                     )}
                   </div>
                   <figcaption>
-                    <h3 className="text-base text-gray-900 font-semibold dark:text-gray-300 flex-1">{project.name}</h3>
+                    <h3 className="text-base font-semibold dark:text-gray-300 flex-1">{project.name}</h3>
                     <span className="text-sm text-gray-500 dark:text-gray-400">{project.description}</span>
                   </figcaption>
                 </figure>

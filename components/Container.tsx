@@ -62,7 +62,7 @@ export default function Container({ children, image, ...customMeta }: Props) {
         <div className="flex items-center gap-2">
           <Image src="/me.png" width={32} height={32} alt="Georgiy Tarasov" priority className="rounded-full" />
           <Link href="/" prefetch={false}>
-            <a className="font-semibold text-base py-1 sm:py-4 text-gray-900 dark:text-gray-100">
+            <a className="font-semibold text-base py-1 sm:py-4 ">
               Georgiy <span className="hidden sm:inline">Tarasov</span>
             </a>
           </Link>
@@ -70,14 +70,14 @@ export default function Container({ children, image, ...customMeta }: Props) {
         <ul className="flex gap-4 sm:gap-1 items-center">
           <li>
             <Link href="/blog" prefetch={false}>
-              <a className="text-gray-900 dark:text-gray-100 text-sm p1 sm:px-3 sm:py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-all">
+              <a className=" text-sm p1 sm:px-3 sm:py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-all">
                 Blog
               </a>
             </Link>
           </li>
           <li>
             <Link href="/about" prefetch={false}>
-              <a className="text-gray-900 dark:text-gray-100 text-sm p1 sm:px-3 sm:py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-all">
+              <a className=" text-sm p1 sm:px-3 sm:py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-all">
                 About
               </a>
             </Link>
@@ -124,7 +124,7 @@ export default function Container({ children, image, ...customMeta }: Props) {
       </nav>
       <main className="px-4 flex-[1_0_auto]">{children}</main>
       <footer className="p-4 md:my-8 flex justify-between items-center">
-        <span className="text-gray-900 dark:text-gray-100 text-xs sm:text-sm">Created by Georgiy Tarasov in 2022</span>
+        <span className=" text-xs sm:text-sm">Created by Georgiy Tarasov in 2022</span>
         <ul className="flex items-center gap-2 sm:gap-4">
           <li>
             <ExternalLink href="https://twitter.com/anottoday" className="flex items-center">

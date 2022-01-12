@@ -20,7 +20,7 @@ class MyDocument extends Document {
           <meta content="#ffffff" name="theme-color" />
           <meta content="#ffffff" name="msapplication-TileColor" />
         </Head>
-        <body className="bg-white dark:bg-black text-white dark:text-black">
+        <body className="bg-white dark:bg-black text-gray-900 dark:text-gray-100">
           <Main />
           <NextScript />
         </body>
