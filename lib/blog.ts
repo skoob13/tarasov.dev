@@ -1,8 +1,7 @@
 import { compareDesc, isSameYear, parseISO } from 'date-fns';
 
+import { Blog } from 'contentlayer/generated';
 import { BlogPost } from 'types';
-
-import { Blog } from '.contentlayer/types';
 
 const formatter = new Intl.DateTimeFormat('en-GB', {
   month: 'long',

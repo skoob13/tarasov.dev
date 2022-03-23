@@ -1,12 +1,12 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useMDXComponent } from 'next-contentlayer/hooks';
 
+import { allBlogs } from 'contentlayer/generated';
 import BlogLayout from 'layouts/BlogLayout';
 import { getBlogPostPreviews, processBlogPost } from 'lib/blog';
 import { BlogPost } from 'types';
 
 // import components from 'components/MDXComponents';
-import { allBlogs } from '.contentlayer/data';
 
 interface Props {
   post: BlogPost;

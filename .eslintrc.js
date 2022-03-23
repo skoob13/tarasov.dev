@@ -5,6 +5,8 @@ const folders = fs
   .filter((dirent) => dirent.isDirectory())
   .map((dirent) => dirent.name);
 
+folders.push('contentlayer');
+
 module.exports = {
   extends: ['plugin:prettier/recommended', 'next/core-web-vitals'],
   plugins: ['simple-import-sort'],

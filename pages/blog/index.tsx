@@ -2,9 +2,8 @@ import { GetStaticProps } from 'next';
 
 import BlogCard, { SmallerBlogPost } from 'components/BlogCard';
 import Container from 'components/Container';
+import { allBlogs } from 'contentlayer/generated';
 import { getBlogPostPreviews } from 'lib/blog';
-
-import { allBlogs } from '.contentlayer/data';
 
 interface Props {
   posts: SmallerBlogPost[];

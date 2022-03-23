@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
     "baseUrl": "./",
+    "paths": {
+      "contentlayer/generated": ["./.contentlayer/generated"]
+    },
     "allowJs": true,
     "alwaysStrict": true,
     "esModuleInterop": true,
@@ -28,6 +31,7 @@
   ],
   "include": [
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    ".contentlayer/generated"
   ]
 }

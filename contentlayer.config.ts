@@ -1,10 +1,11 @@
-import { ComputedFields, defineDocumentType, makeSource } from 'contentlayer/source-files';
 import readingTime from 'reading-time';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeCodeTitles from 'rehype-code-titles';
 import rehypePrism from 'rehype-prism-plus';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
+
+import { ComputedFields, defineDocumentType, makeSource } from 'contentlayer/source-files';
 
 const computedFields: ComputedFields = {
   readingTime: { type: 'json', resolve: (doc: any) => readingTime(doc.body.raw) },
@@ -29,7 +30,7 @@ const computedFields: ComputedFields = {
 const Blog = defineDocumentType(() => ({
   name: 'Blog',
   filePathPattern: '**/*.mdx',
-  bodyType: 'mdx',
+  contentType: 'mdx',
   fields: {
     title: { type: 'string', required: true },
     seoTitle: { type: 'string', required: true },

@@ -3,9 +3,8 @@ import Image from 'next/image';
 
 import BlogCard from 'components/BlogCard';
 import Container from 'components/Container';
+import { allBlogs } from 'contentlayer/generated';
 import { getBlogPostPreviews } from 'lib/blog';
-
-import { allBlogs } from '.contentlayer/data';
 
 interface Props {
   posts: { slug: string; title: string; readingTime: string; publishedAt: string }[];
