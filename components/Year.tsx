@@ -5,5 +5,5 @@ interface Props {
 }
 
 export default function Year({ children }: Props) {
-  return <h3 className="text-lg md:text-xl font-bold mb-4 tracking-tight">{children}</h3>;
+  return <h3 className="mb-4 text-lg font-bold tracking-tight md:text-xl">{children}</h3>;
 }

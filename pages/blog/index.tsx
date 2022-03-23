@@ -20,13 +20,13 @@ export const getStaticProps: GetStaticProps<Props> = () => {
 export default function Home({ posts }: Props) {
   return (
     <Container>
-      <div className="flex flex-col justify-center items-start mb-16">
-        <h1 className="font-bold text-3xl md:text-6xl tracking-tight mt-8 mb-8">Latest Posts</h1>
-        <h2 className="mb-8 sm:mb-16 text-gray-600 dark:text-gray-400">
+      <div className="mb-16 flex flex-col items-start justify-center">
+        <h1 className="mt-8 mb-8 text-3xl font-bold tracking-tight md:text-6xl">Latest Posts</h1>
+        <h2 className="mb-8 text-gray-600 dark:text-gray-400 sm:mb-16">
           My exploration is leaning towards web development and performance gains. However, I may post some personal
           insights.
         </h2>
-        <div className="w-full mb-16">
+        <div className="mb-16 w-full">
           <ul className="flex flex-col">
             {posts.map((post) => (
               <BlogCard key={post.slug} post={post} />

@@ -48,13 +48,13 @@ const PROJECTS = [
 export default function Home({ posts }: Props) {
   return (
     <Container>
-      <div className="flex flex-col justify-center items-start mb-16">
-        <h1 className="font-bold text-3xl md:text-6xl tracking-tight mt-8 mb-16 ">
+      <div className="mb-16 flex flex-col items-start justify-center">
+        <h1 className="mt-8 mb-16 text-3xl font-bold tracking-tight md:text-6xl ">
           <span className="text-sky-600">Hello!</span>
           <br />I bootstrap business and develop things for the Internet.
         </h1>
-        <div className="w-full mb-16">
-          <h2 className="font-bold text-xl md:text-3xl tracking-tight mb-4 ">Writing</h2>
+        <div className="mb-16 w-full">
+          <h2 className="mb-4 text-xl font-bold tracking-tight md:text-3xl ">Writing</h2>
           <ul className="flex flex-col">
             {posts.map((post) => (
               <BlogCard key={post.slug} post={post} clampLines />
@@ -62,15 +62,15 @@ export default function Home({ posts }: Props) {
           </ul>
         </div>
         <div className="w-full">
-          <h2 className="font-bold text-xl md:text-3xl tracking-tight mb-4 ">Projects</h2>
-          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <h2 className="mb-4 text-xl font-bold tracking-tight md:text-3xl ">Projects</h2>
+          <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             {PROJECTS.map((project) => (
               <li
-                className="bg-gray-50 rounded-lg p-6 dark:bg-gray-800 dark:highlight-white/5 hover:ring-2 ring-gray-300 transition-all"
+                className="dark:highlight-white/5 rounded-lg bg-gray-50 p-6 ring-gray-300 transition-all hover:ring-2 dark:bg-gray-800"
                 key={project.name}
               >
                 <figure className="flex items-center">
-                  <div className="w-8 mr-4 flex items-center">
+                  <div className="mr-4 flex w-8 items-center">
                     {typeof project.img === 'string' ? (
                       <Image
                         src={project.img}
@@ -84,7 +84,7 @@ export default function Home({ posts }: Props) {
                     )}
                   </div>
                   <figcaption>
-                    <h3 className="text-base font-semibold dark:text-gray-300 flex-1">{project.name}</h3>
+                    <h3 className="flex-1 text-base font-semibold dark:text-gray-300">{project.name}</h3>
                     <span className="text-sm text-gray-500 dark:text-gray-400">{project.description}</span>
                   </figcaption>
                 </figure>

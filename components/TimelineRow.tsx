@@ -8,8 +8,8 @@ interface Props {
 export default function TimelineRow({ title, children }: Props) {
   return (
     <li className="mb-4 ml-2">
-      <p className="font-medium mb-2 text-green-700 dark:text-green-300">✅ {title}</p>
-      <p className="text-gray-700 dark:text-gray-400 ml-6 prose dark:prose-dark">{children}</p>
+      <p className="mb-2 font-medium text-green-700 dark:text-green-300">✅ {title}</p>
+      <p className="prose ml-6 text-gray-700 dark:prose-dark dark:text-gray-400">{children}</p>
     </li>
   );
 }

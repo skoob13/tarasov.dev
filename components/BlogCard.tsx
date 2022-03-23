@@ -16,10 +16,10 @@ export default function BlogCard({ post, clampLines }: Props) {
   return (
     <li>
       <Link href={`/blog/${post.slug}`} prefetch={false}>
-        <a className="flex flex-col bg-gray-50 rounded-lg p-6 dark:bg-gray-800 dark:highlight-white/5 hover:ring-1 ring-gray-300 transition-all">
+        <a className="dark:highlight-white/5 flex flex-col rounded-lg bg-gray-50 p-6 ring-gray-300 transition-all hover:ring-1 dark:bg-gray-800">
           <div className="flex items-center">
             <h3
-              className={`text-base font-semibold dark:text-gray-300 flex-1 mr-1${clampLines ? ' line-clamp-1' : ''}`}
+              className={`flex-1 text-base font-semibold dark:text-gray-300 mr-1${clampLines ? ' line-clamp-1' : ''}`}
             >
               {post.title}
             </h3>
@@ -39,7 +39,7 @@ export default function BlogCard({ post, clampLines }: Props) {
               <figcaption className="text-base font-semibold dark:text-gray-300">{post.readingTime}</figcaption>
             </figure>
           </div>
-          <span className="text-sm text-gray-500 dark:text-gray-400 mt-1">Published on {post.publishedAt}</span>
+          <span className="mt-1 text-sm text-gray-500 dark:text-gray-400">Published on {post.publishedAt}</span>
         </a>
       </Link>
     </li>
