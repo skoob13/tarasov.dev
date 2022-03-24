@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTheme } from 'next-themes';
 
-import ExternalLink from './ExternalLink';
+import ExternalLink from './external-link';
 
 interface Props {
   children: React.ReactNode;

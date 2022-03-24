@@ -1,7 +1,7 @@
 import { GetStaticProps } from 'next';
 
-import BlogCard, { SmallerBlogPost } from 'components/BlogCard';
-import Container from 'components/Container';
+import BlogCard, { SmallerBlogPost } from 'components/blog-card';
+import Container from 'components/container';
 import { allBlogs } from 'contentlayer/generated';
 import { getBlogPostPreviews } from 'lib/blog';
 

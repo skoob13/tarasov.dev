@@ -1,7 +1,7 @@
-import Divider from './Divider';
-import ExternalLink from './ExternalLink';
-import TimelineRow from './TimelineRow';
-import Year from './Year';
+import Divider from './divider';
+import ExternalLink from './external-link';
+import TimelineRow from './timeline-row';
+import Year from './year';
 
 export default function Timeline() {
   return (

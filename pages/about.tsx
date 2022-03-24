@@ -1,6 +1,6 @@
-import Container from 'components/Container';
-import ExternalLink from 'components/ExternalLink';
-import Timeline from 'components/Timeline';
+import Container from 'components/container';
+import ExternalLink from 'components/external-link';
+import Timeline from 'components/timeline';
 
 export default function AboutPage() {
   return (
