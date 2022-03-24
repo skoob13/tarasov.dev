@@ -6,10 +6,17 @@ import Year from './year';
 export default function Timeline() {
   return (
     <div>
+      <Year>2022</Year>
+      <ul>
+        <TimelineRow title="Learning Truffle Hunting">
+          I and my dog Brie finished a first-level nosework course doing cinnamon scent detection.
+        </TimelineRow>
+      </ul>
+      <Divider />
       <Year>2021</Year>
       <ul>
         <TimelineRow title="Learned Rust">
-          Rust is the future of tooling in JavaScript world and I totally agree.
+          Rust is the future of tooling in JavaScript world. It was worth learning.
         </TimelineRow>
         <TimelineRow title="HappyDragons">
           <ExternalLink href="https://happydragons.co">HappyDragons</ExternalLink> introduces a new way to buy and care

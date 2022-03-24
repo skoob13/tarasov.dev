@@ -21,7 +21,8 @@ export default function AboutPage() {
         </p>
         <p className="prose mb-2 dark:prose-dark">
           In my spare time I enjoy contributing to open source projects, launching drones to sky, travelling around the
-          world. Another passion of mine is cars and racing.
+          world, doing a <ExternalLink href="https://en.wikipedia.org/wiki/Nosework">nosework</ExternalLink> with my
+          dog. Another passion of mine is cars and racing.
         </p>
         <p className="prose mb-8 dark:prose-dark sm:mb-16">
           I&rsquo;m a big fan of web technologies. By the way, this website was built using Next.js, Preact, and
