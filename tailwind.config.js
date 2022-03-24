@@ -5,9 +5,6 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
-      colors: {
-        'blue-opaque': 'rgb(13 42 148 / 18%)',
-      },
       fontFamily: {
         sans: ['Inter', ...fontFamily.sans],
       },
