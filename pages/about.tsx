@@ -14,10 +14,10 @@ export default function AboutPage() {
         </h2>
         <h3 className="mb-4 text-xl font-bold tracking-tight md:text-3xl">Bio</h3>
         <p className="prose mb-2 dark:prose-dark">
-          I live in Saint Petersburg, Russia. However, I&rsquo;m in the process of relocating. Software development is
-          my primary business and hobby. Currently I work in the product accelerator company, so it provides a unique
-          opportunity to work on variety of markets, e.g. fintech, proptech, insurtech, sport, online education and
-          other. During my career I have sucussfully developed and launched 20+ products.
+          I live in Zagreb, Croatia. Software development is my primary business and hobby. Currently I work in the
+          product accelerator company, so it provides a unique opportunity to work on variety of markets, e.g. fintech,
+          proptech, insurtech, sport, online education and other. During my career I have sucussfully developed and
+          launched 20+ products.
         </p>
         <p className="prose mb-2 dark:prose-dark">
           In my spare time I enjoy contributing to open source projects, launching drones to sky, travelling around the
