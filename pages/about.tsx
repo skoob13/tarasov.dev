@@ -16,7 +16,7 @@ export default function AboutPage() {
         <p className="prose mb-2 dark:prose-dark">
           I live in Zagreb, Croatia. Software development is my primary business and hobby. Currently I work in the
           product accelerator company, so it provides a unique opportunity to work on variety of markets, e.g. fintech,
-          proptech, insurtech, sport, online education and other. During my career I have sucussfully developed and
+          proptech, insurtech, sport, online education and other. During my career I have successfully developed and
           launched 20+ products.
         </p>
         <p className="prose mb-2 dark:prose-dark">
