@@ -77,7 +77,7 @@ export default function Home({ posts }: Props) {
                         width={48}
                         height={48}
                         alt={`${project.name} Logo`}
-                        objectFit="contain"
+                        className="object-contain"
                       />
                     ) : (
                       project.img
