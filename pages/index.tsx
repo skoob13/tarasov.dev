@@ -1,5 +1,5 @@
 import { GetStaticProps } from 'next';
-import Image from 'next/image';
+import Image from 'next/future/image';
 
 import BlogCard from 'components/blog-card';
 import Container from 'components/container';
