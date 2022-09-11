@@ -161,4 +161,4 @@ Routine things in the React world, huh?
 
 As always the answer is "it depends". The UI thread is fast enough to handle the `diffProperties` function. However, if you have a complex UI with a lot of nested views, you might want to optimize rendering at least for low end Android devices. When you use StyleSheet API, you are already covered and references are always the same. But some of the React Native styling libraries create new objects on every render. So if you use such libraries, you might want to optimize its rendering process firstly.
 
-Personally, I noticed the significant difference only when an app rendered more than 5000 views on the screen rendering at the same time, and it isn't a common case definitely. I wouldn't suggest to spend time optimizing the `style` prop unless you have a real use case.
+Personally, I noticed the significant difference only when an app rendered more than 5000 views on the screen at the same time, and it isn't a common case definitely. I wouldn't suggest to spend time optimizing the `style` prop unless you have a real use case.
