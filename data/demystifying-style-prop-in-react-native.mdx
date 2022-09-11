@@ -1,0 +1,164 @@
+---
+title: Demystyfing Style Prop in React Native
+seoTitle: Demystyfing Style Prop in React Native
+summary: Have you ever wondered how the style prop works in React Native? Some of early React Native developers might have noticed that the style prop was converting individual styles to numbers which then were sent to the native side. In this article, I will explain how the style prop works in React Native 0.70.
+publishedAt: 2022-09-02
+isPublished: true
+---
+
+Have you ever wondered how the style property works in React Native? Some of early React Native developers might have noticed that the style prop was converting individual styles to numbers which you could see in Inspector. As it had grabbed my attention a few years ago, I discovered that it wasn't true anymore. In this article, I will explain how it really works.
+
+## What is the `style` prop in React Native
+
+With React Native, developers style their applications using JavaScript. Furthermore, all core components accept `style` prop with a CSS-in-JS like API. For example if you pass the inline style:
+
+```jsx
+import { View } from 'react-native';
+
+const Screen = () => (
+  <View style={{ flex: 1, flexDirection: 'row }} />
+);
+```
+
+React Native documentation also suggests to use StyleSheet API to define styles when your app grows bigger, and managing inline styles becomes cumbersome. For example:
+
+```jsx
+import { View, StyleSheet } from 'react-native';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+});
+
+const Screen = () => (
+  <View style={styles.container} />
+);
+```
+
+You might also pass an array of styles in order to create composition:
+
+```jsx
+import { View, StyleSheet } from 'react-native';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+
+  row: {
+    height: 50,
+  },
+
+  red: {
+    backgroundColor: 'red',
+  },
+
+  green: {
+    backgroundColor: 'green',
+  },
+});
+
+const Screen = () => (
+  <View style={styles.container}>
+    <View style={[styles.row, styles.red]} />
+    <View style={[styles.row, styles.green]} />
+  </View>
+);
+```
+
+Hence, the problem appears: when you pass a plain object/array to the `style` prop, you create a new reference on every render killing all memoization techniques such as `React.memo`. But if you use `StyleSheet`, references stay the same. So the question appears: do you really need to optimize the `style` property to avoid useless rerenders? Let's find out!
+
+## Prior to the version 0.56
+
+Prior to the version 0.56, React Native used to convert individual styles in StyleSheet to numbers. You could notice it in Inspector. For example, if you passed the following style to the View component:
+
+```jsx
+import { View, StyleSheet } from 'react-native';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+});
+
+const Screen = () => (
+  <View style={styles.container} />
+);
+```
+
+In Inspector you would notice that the `style` prop was actually a number:
+
+```jsx
+<View style={56} />
+```
+
+And that was the [intented behavior](https://github.com/facebook/react-native/blob/0.55-stable/Libraries/StyleSheet/StyleSheet.js#L236). But why? The answer is simple: React Native optimized your style objects automatically to avoid unnecessary rerenders and rendering work, so StyleSheet memoized style objects and assigned them individual IDs. Furthermore, when you passed the same style object, it would be converted to the same ID. But what if you passed an array of styles? In this case, StyleSheet would convert each style to a number and then would create a new array with numbers. For example:
+
+```jsx
+import { View, StyleSheet } from 'react-native';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+
+  row: {
+    height: 50,
+  },
+
+  red: {
+    backgroundColor: 'red',
+  },
+
+  green: {
+    backgroundColor: 'green',
+  },
+});
+
+const Screen = () => (
+  <View style={styles.container}>
+    <View style={[styles.row, styles.red]} />
+    <View style={[styles.row, styles.green]} />
+  </View>
+);
+```
+
+In Inspector you could notice that the `style` prop was actually an array of numbers:
+
+```jsx
+<View style={56}>
+  <View style={[57, 58]} />
+  <View style={[57, 59]} />
+</View>
+```
+
+But [things changed](https://github.com/facebook/react-native/blob/0.56-stable/Libraries/StyleSheet/StyleSheet.js#L369) in the version 0.56.
+
+## How it works in the version 0.70
+
+In the latest React Native version 0.70, the `style` prop works differently. It doesn't convert styles to IDs anymore. Instead, the renderer flattens the `style` prop to individual props!
+
+Despite the fact that Typescript definitions don't have individual style properties, you're still able to pass them:
+
+```jsx
+import { View } from 'react-native';
+
+const Screen = () => (
+  <View flex={1} backgroundColor="red" />
+);
+```
+
+Turns out that both renderers on [the old](https://github.com/facebook/react-native/blob/0.70-stable/Libraries/Renderer/implementations/ReactNativeRenderer-prod.js#L1611) and [new architecture](https://github.com/facebook/react-native/blob/0.70-stable/Libraries/Renderer/implementations/ReactNativeRenderer-prod.js#L1611) (Fabric) use the same function to commit changed props to the native side. The function is called `diffProperties` and it's responsible for taking a diff from the previous and new props to reduce amount of calls to the native side.
+
+This means that **the only thing** you can really optimize is the `diffProperties` function. Since it recursively traverses props and compares individual fields with [shallow equality](https://github.com/facebook/react/blob/v18.2.0/packages/react-native-renderer/src/ReactNativeAttributePayload.js#L335), the best optimization you can do is to assure that the `style` prop has the same reference between rerenders.
+
+Routine things in the React world, huh?
+
+## Do you really need to optimize the `style` prop?
+
+As always the answer is "it depends". The UI thread is fast enough to handle the `diffProperties` function. However, if you have a complex UI with a lot of nested views, you might want to optimize rendering at least for low end Android devices. When you use StyleSheet API, you are already covered and references are always the same. But some of the React Native styling libraries create new objects on every render. So if you use such libraries, you might want to optimize its rendering process firstly.
+
+Personally, I noticed the significant difference only when I rendered more than 5000 views on the screen rendering at the same time, and it isn't a common case definitely. I wouldn't suggest to spend time optimizing the `style` prop unless you have a real use case.
