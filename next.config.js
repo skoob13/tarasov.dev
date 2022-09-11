@@ -1,24 +1,17 @@
 const { withContentlayer } = require('next-contentlayer');
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: !!process.env.ANALYZE,
+});
 
 /**
  * @type {import('next').NextConfig}
  */
-module.exports = withContentlayer({
-  images: {
-    formats: ['image/avif', 'image/webp'],
-  },
-  swcMinify: true,
-  reactStrictMode: true,
-  webpack: (config, { dev, isServer }) => {
-    if (!dev && !isServer) {
-      Object.assign(config.resolve.alias, {
-        'react/jsx-runtime.js': 'preact/compat/jsx-runtime',
-        react: 'preact/compat',
-        'react-dom': 'preact/compat',
-        'react-dom/test-utils': 'preact/test-utils',
-      });
-    }
-
-    return config;
-  },
-});
+module.exports = withBundleAnalyzer(
+  withContentlayer({
+    images: {
+      formats: ['image/avif', 'image/webp'],
+    },
+    swcMinify: true,
+    reactStrictMode: true,
+  })
+);

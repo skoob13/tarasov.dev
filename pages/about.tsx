@@ -25,8 +25,8 @@ export default function AboutPage() {
           dog. Another passion of mine is cars and racing.
         </p>
         <p className="prose mb-8 dark:prose-dark sm:mb-16">
-          I&rsquo;m a big fan of web technologies. By the way, this website was built using Next.js, Preact, and
-          Tailwind CSS.
+          I&rsquo;m a big fan of web technologies. By the way, this website was built using Next.js, React, and Tailwind
+          CSS.
         </p>
         <h3 className="mb-4 text-xl font-bold tracking-tight md:text-3xl">Links</h3>
         <ul className="mb-8 flex flex-col gap-2 sm:mb-16">
