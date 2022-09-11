@@ -27,7 +27,7 @@ export default function Home({ posts }: Props) {
           insights.
         </h2>
         <div className="mb-16 w-full">
-          <ul className="flex flex-col">
+          <ul className="flex flex-col gap-3">
             {posts.map((post) => (
               <BlogCard key={post.slug} post={post} />
             ))}
