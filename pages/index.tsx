@@ -54,7 +54,7 @@ export default function Home({ posts }: Props) {
           <br />I bootstrap business and develop things for the Internet.
         </h1>
         <div className="mb-16 w-full">
-          <h2 className="mb-4 text-xl font-bold tracking-tight md:text-3xl ">Writing</h2>
+          <h2 className="mb-4 text-xl font-bold tracking-tight md:text-3xl">Writing</h2>
           <ul className="flex flex-col">
             {posts.map((post) => (
               <BlogCard key={post.slug} post={post} clampLines />
@@ -62,7 +62,7 @@ export default function Home({ posts }: Props) {
           </ul>
         </div>
         <div className="w-full">
-          <h2 className="mb-4 text-xl font-bold tracking-tight md:text-3xl ">Projects</h2>
+          <h2 className="mb-4 text-xl font-bold tracking-tight md:text-3xl">Projects</h2>
           <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             {PROJECTS.map((project) => (
               <li

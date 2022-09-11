@@ -3,7 +3,7 @@ const { withContentlayer } = require('next-contentlayer');
 /**
  * @type {import('next').NextConfig}
  */
-module.exports = withContentlayer()({
+module.exports = withContentlayer({
   images: {
     formats: ['image/avif', 'image/webp'],
   },
@@ -14,8 +14,8 @@ module.exports = withContentlayer()({
       Object.assign(config.resolve.alias, {
         'react/jsx-runtime.js': 'preact/compat/jsx-runtime',
         react: 'preact/compat',
-        'react-dom/test-utils': 'preact/test-utils',
         'react-dom': 'preact/compat',
+        'react-dom/test-utils': 'preact/test-utils',
       });
     }
 
