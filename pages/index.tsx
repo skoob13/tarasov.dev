@@ -57,7 +57,7 @@ export default function Home({ posts }: Props) {
           <h2 className="mb-4 text-xl font-bold tracking-tight md:text-3xl">Writing</h2>
           <ul className="flex flex-col gap-2">
             {posts.map((post) => (
-              <BlogCard key={post.slug} post={post} clampLines />
+              <BlogCard key={post.slug} post={post} />
             ))}
           </ul>
         </div>
