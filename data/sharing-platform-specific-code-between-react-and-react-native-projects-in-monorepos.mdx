@@ -1,0 +1,141 @@
+---
+title: Sharing Platform Specific Code Between React and React Native Projects in Monorepos
+seoTitle: Sharing Platform Specific Code Between React and React Native Projects in Monorepos
+summary: React and React Native projects oftenly have sharable code between two platforms which should be compatible for both platforms. While the article focuses on NX monorepos, the same approach can be used for Turborepo/Lerna/Rush and other monorepos as well.
+publishedAt: 2022-10-15
+isPublished: true
+---
+
+React and React Native projects tend to have sharable code between two platforms which developers would like to make compatible for both platforms in a single import declaration. While the article focuses on [NX monorepos](https://nx.dev/), the same approach can be used for Turborepo/Lerna/Rush and other monorepos as well.
+
+## The Problem
+
+Let's imagine we have a Next.js project and a React Native project in a monorepo, and we want to share a typical wrapper library for REST requests based on `fetch` API. On the one hand, the web project uses Cookies for authentication, so `fetch` needs a correct header to set cookies automatically. On the other hand, the React Native project uses some token authentication such JWT, so we have to store a token in a secured storage like Keychain or encrypted `react-native-mmkv`.
+
+The problem is that we need to have two different implementations of the same library for two different platforms to properly handle authentication, so we would have two imports of almost same libraries.
+
+### React Native Library
+
+```ts
+// libs/mobile/request/src/index.ts
+import MMKV from 'react-native-mmkv';
+
+const storage = new MMKV();
+
+export function request(url: string, options: RequestInit) {
+  const token = storage.getString('authToken');
+  return fetch(url, {
+    ...options,
+    headers: {
+      ...options.headers,
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+```
+
+### React Library
+
+```ts
+// libs/web/request/src/index.ts
+export function request(url: string, options: RequestInit) {
+  return fetch(url, {
+    ...options,
+    useCredentials: 'include',
+  });
+}
+```
+
+## The Solution
+
+React Native supports [Platform Specific Extensions](https://reactnative.dev/docs/platform-specific-code#platform-specific-extensions) which allows us to have different implementations of the same library, so Metro bundler will resolve a correct module for React Native while the Webpack (or other bundler) will resolve a correct module for the web:
+
+* `library.ios.ts` - iOS specific implementation
+* `library.android.ts` - Android specific implementation
+* `library.native.ts` - React Native specific implementation
+
+### Library Structure
+
+We should refactor a little bit library to expose a single module. Consider following structure of the `libs/shared/request` library:
+
+```
+|-src
+|  |-lib
+|  |  |-platform-specific.ts
+|  |  |-platform-specific.native.ts
+|  |  |-request.ts
+|  |  |-types.ts
+|  |-index.ts
+```
+
+`request.ts` is a common module which exports the `request` function. `platform-specific.ts` and `platform-specific.native.ts` are implementations for each platform that we use, so we can import them in `request.ts` and use in the `request` function. We specifically wouldn't like to implement two platform-specific `request` function because it leads to a code duplication. Moreover, TypeScript doesn't support custom extensions, so it's not able to resolve our `.native.ts` extension without a direct import or a project's configuration (in case of RN it's implemented on the Metro's bundler level). To address this issue, we're going to force ourselves to use the same type for exported platform-specific functions in order to reduce a risk of potential mistakes.
+
+### `lib/types.ts`
+
+Contains the type for platform-specific function.
+
+```ts
+export type ExtendRequest = (options: RequestInit) => RequestInit;
+```
+
+### `lib/platform-specific.ts`
+
+```ts
+import { ExtendRequest } from './types';
+
+export const extendRequestOptions: ExtendRequest = (options) => {
+  return {
+    ...options,
+    useCredentials: true,
+  };
+}
+```
+
+### `lib/platform-specific.native.ts`
+
+```ts
+import MMKV from 'react-native-mmkv';
+
+import { ExtendRequest } from './types';
+
+const storage = new MMKV();
+
+export const extendRequestOptions: ExtendRequest = (options) => {
+  return {
+    ...options,
+    headers: {
+      ...options.headers,
+      Authorization: `Bearer ${token}`,
+    },
+  };
+}
+```
+
+### `lib/request.ts`
+
+```ts
+import { extendRequestOptions } from './platform-specific';
+
+export function request(url: string, options: RequestInit) {
+  const requestOptions = extendRequestOptions(options);
+  return fetch(url, requestOptions);
+}
+```
+
+### `index.ts`
+
+```ts
+export { request } from './lib/request';
+```
+
+### Usage
+
+Afterwards, we could import the library using a regular import:
+
+```ts
+import { request } from '@example-org/shared/request';
+```
+
+## Conclusion
+
+The approach described in the article is pretty straightforward, so it's easy to use in smaller monorepos. However, you could still encounter issues if you have more than a few projects which have to reference a single shared library. In this case, I recommend designing a proper architecture instead hacking around the module resolution mechanism which is obviously not a perfect solution🙂
