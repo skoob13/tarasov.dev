@@ -19,19 +19,19 @@ If we take a look in the source code of the [image loader](https://github.com/ve
 You can either define static width or implement dynamic calculation using the `onLayout` function. But let's discuss the width problem later and implement the loader:
 ```typescript
 interface ImageLoaderConfig {
-	src: string;
-	width: number;
-	quality?: number;
+  src: string;
+  width: number;
+  quality?: number;
 }
 
 export function imageLoader({ src, width, quality }: ImageLoaderConfig) {
-	const url = new URL('/_next/image', process.env.NX_WEB_URL); // replace the env variable with the base URL of your Next.js frontend, e.g. 'https://example.com'
-	
-	url.searchParams.append('url', src);
-	url.searchParams.append('w', width.toString());
-	url.searchParams.append('q', String(quality || 75));
-	
-	return url.toString();
+  const url = new URL('/_next/image', process.env.NX_WEB_URL); // replace the env variable with the base URL of your Next.js frontend, e.g. 'https://example.com'
+  
+  url.searchParams.append('url', src);
+  url.searchParams.append('w', width.toString());
+  url.searchParams.append('q', String(quality || 75));
+  
+  return url.toString();
 }
 ```
 
@@ -44,58 +44,58 @@ The most obvious solution is to mirror functionality from Next.js and define sta
 import { StyleSheet, ImageProps, Image as RNImage } from 'react-native';
 
 function extractStyleWidth(style?: ImageProps['style']) {
-	if (style) {
-		const { width } = StyleSheet.flatten(style);
+  if (style) {
+    const { width } = StyleSheet.flatten(style);
 
-		if (typeof width === 'number') {
-			return width;
-		}
-	}
+    if (typeof width === 'number') {
+      return width;
+    }
+  }
 }
 
 interface ImageLoaderConfig {
-	src: string;
-	width: number;
-	quality?: number;
+  src: string;
+  width: number;
+  quality?: number;
 }
 
 export function imageLoader({ src, width, quality }: ImageLoaderConfig) {
-	const url = new URL('/_next/image', process.env.NX_WEB_URL); // replace the env variable with the base URL of your Next.js frontend, e.g. 'https://example.com'
-	
-	url.searchParams.append('url', src);
-	url.searchParams.append('w', width.toString());
-	url.searchParams.append('q', String(quality || 75));
-	
-	return url.toString();
+  const url = new URL('/_next/image', process.env.NX_WEB_URL); // replace the env variable with the base URL of your Next.js frontend, e.g. 'https://example.com'
+  
+  url.searchParams.append('url', src);
+  url.searchParams.append('w', width.toString());
+  url.searchParams.append('q', String(quality || 75));
+  
+  return url.toString();
 }
 
 export interface Props extends ImageProps {
-	unoptimized?: boolean;
-	width?: number;
-	quality?: number;
+  unoptimized?: boolean;
+  width?: number;
+  quality?: number;
 }
 
 export function Image({ unoptimized, source, style, width, quality, ...props }: Props) {
-	const imageWidth = extractStyleWidth(style) || width;
+  const imageWidth = extractStyleWidth(style) || width;
 
-	return (
-		<RNImage
-			{...props}
-			source={
-				!unoptimized && typeof source === 'object' && 'uri' in source && source.uri && imageWidth
-					? {
-							...source,
-							uri: imageLoader({
-								quality,
-								width: imageWidth,
-								src: source.uri,
-							}),
-						}
-					: source
-			}
-			style={style}
-		/>
-	);
+  return (
+    <RNImage
+      {...props}
+      source={
+        !unoptimized && typeof source === 'object' && 'uri' in source && source.uri && imageWidth
+          ? {
+              ...source,
+              uri: imageLoader({
+                quality,
+                width: imageWidth,
+                src: source.uri,
+              }),
+            }
+          : source
+      }
+      style={style}
+    />
+  );
 }
 ```
 
@@ -105,61 +105,61 @@ However, if you test the code, it won't work as is. The one crucial part to ment
 You can find default values for `deviceSizes` [here](https://nextjs.org/docs/api-reference/next/image#device-sizes) and for `imageSizes` [here](https://nextjs.org/docs/api-reference/next/image#image-sizes) or check your `next.config.js` file if it contains a similar configuration:
 ```js
 module.exports = {
-	images: {
-		imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-		deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-	},
+  images: {
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+  },
 };
 ```
 So in order to make the loader work we have to extract a matching value from the arrays above:
 ```ts
 const config = {
-	deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-	imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+  deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+  imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
 };
 
 const SIZES = [...config.imageSizes, ...config.deviceSizes];
 
 function normalizeWidth(width: number) {
-	const calculatedSize = PixelRatio.getPixelSizeForLayoutSize(width);
-	const matchingIndex = SIZES.findIndex((size) => size >= calculatedSize);
-	
-	if (matchingIndex === -1) {
-		return SIZES[SIZES.length - 1];
-	} else if (matchingIndex === 0) {
-		return SIZES[0];
-	} else {
-		const left = SIZES[matchingIndex - 1];
-		const right = SIZES[matchingIndex];
+  const calculatedSize = PixelRatio.getPixelSizeForLayoutSize(width);
+  const matchingIndex = SIZES.findIndex((size) => size >= calculatedSize);
+  
+  if (matchingIndex === -1) {
+    return SIZES[SIZES.length - 1];
+  } else if (matchingIndex === 0) {
+    return SIZES[0];
+  } else {
+    const left = SIZES[matchingIndex - 1];
+    const right = SIZES[matchingIndex];
 
-		if ((left + right) / 2 > width) {
-			return left;
-		}
+    if ((left + right) / 2 > width) {
+      return left;
+    }
 
-		return right;
-	}
+    return right;
+  }
 }
 ```
 
 Since mobile applications define its size in points, we have to convert logical points to pixels using the built-in utility `PixelRatio.getPixelSizeForLayoutSize`. You could also redefine the way how the function takes the first matching value from the array to avoid downscaling. The function above "scales down" images which fall below the average of left and right boundaries, and because of that images could have visible artifacts. If you want to avoid this issue use a first matching value:
 ```typescript
 const config = {
-	deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-	imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+  deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+  imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
 };
 
 const SIZES = [...config.imageSizes, ...config.deviceSizes];
 
 function normalizeWidth(width: number) {
-	const calculatedSize = PixelRatio.getPixelSizeForLayoutSize(width);
-	const matchingSize = SIZES.find((size) => size >= calculatedSize);
+  const calculatedSize = PixelRatio.getPixelSizeForLayoutSize(width);
+  const matchingSize = SIZES.find((size) => size >= calculatedSize);
 
-	// width is larger than the image loader can handle
-	if (matchingSize === -1) {
-		return SIZES[SIZES.length - 1];
-	}
+  // width is larger than the image loader can handle
+  if (matchingSize === -1) {
+    return SIZES[SIZES.length - 1];
+  }
 
-	return matchingSize;
+  return matchingSize;
 }
 ```
 As a result, you'll get an optimized image component:
@@ -167,85 +167,85 @@ As a result, you'll get an optimized image component:
 import { StyleSheet, ImageProps, Image as RNImage, PixelRatio } from 'react-native';
 
 function extractStyleWidth(style?: ImageProps['style']) {
-	if (style) {
-		const { width } = StyleSheet.flatten(style);
+  if (style) {
+    const { width } = StyleSheet.flatten(style);
 
-		if (typeof width === 'number') {
-			return width;
-		}
-	}
+    if (typeof width === 'number') {
+      return width;
+    }
+  }
 }
 
 const config = {
-	deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-	imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+  deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+  imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
 };
 
 const SIZES = [...config.imageSizes, ...config.deviceSizes];
 
 function normalizeWidth(width: number) {
-	const calculatedSize = PixelRatio.getPixelSizeForLayoutSize(width);
-	const matchingIndex = SIZES.findIndex((size) => size >= calculatedSize);
-	
-	if (matchingIndex === -1) {
-		return SIZES[SIZES.length - 1];
-	} else if (matchingIndex === 0) {
-		return SIZES[0];
-	} else {
-		const left = SIZES[matchingIndex - 1];
-		const right = SIZES[matchingIndex];
+  const calculatedSize = PixelRatio.getPixelSizeForLayoutSize(width);
+  const matchingIndex = SIZES.findIndex((size) => size >= calculatedSize);
+  
+  if (matchingIndex === -1) {
+    return SIZES[SIZES.length - 1];
+  } else if (matchingIndex === 0) {
+    return SIZES[0];
+  } else {
+    const left = SIZES[matchingIndex - 1];
+    const right = SIZES[matchingIndex];
 
-		if ((left + right) / 2 > width) {
-			return left;
-		}
+    if ((left + right) / 2 > width) {
+      return left;
+    }
 
-		return right;
-	}
+    return right;
+  }
 }
 
 interface ImageLoaderConfig {
-	src: string;
-	width: number;
-	quality?: number;
+  src: string;
+  width: number;
+  quality?: number;
 }
 
 export function imageLoader({ src, width, quality }: ImageLoaderConfig) {
-	const url = new URL('/_next/image', process.env.NX_WEB_URL); // replace the env variable with the base URL of your Next.js frontend, e.g. 'https://example.com'
-	
-	url.searchParams.append('url', src);
-	url.searchParams.append('w', width.toString());
-	url.searchParams.append('q', String(quality || 75));
-	
-	return url.toString();
+  const url = new URL('/_next/image', process.env.NX_WEB_URL); // replace the env variable with the base URL of your Next.js frontend, e.g. 'https://example.com'
+  
+  url.searchParams.append('url', src);
+  url.searchParams.append('w', width.toString());
+  url.searchParams.append('q', String(quality || 75));
+  
+  return url.toString();
 }
 
 export interface Props extends ImageProps {
-	unoptimized?: boolean;
-	width?: number;
-	quality?: number;
+  unoptimized?: boolean;
+  width?: number;
+  quality?: number;
 }
 
 export function Image({ unoptimized, source, style, width, quality, ...props }: Props) {
-	const imageWidth = extractStyleWidth(style) || width;
+  const imageWidth = extractStyleWidth(style) || width;
 
-	return (
-		<RNImage
-			{...props}
-			source={
-				!unoptimized && typeof source === 'object' && 'uri' in source && source.uri && imageWidth
-					? {
-							...source,
-							uri: imageLoader({
-								quality,
-								width: imageWidth,
-								src: source.uri,
-							}),
-						}
-					: source
-			}
-			style={style}
-		/>
-	);
+  return (
+    <RNImage
+      {...props}
+      source={
+        !unoptimized && typeof source === 'object' && 'uri' in source && source.uri && imageWidth
+          ? {
+              ...source,
+              uri: imageLoader({
+                quality,
+                width: imageWidth,
+                src: source.uri,
+              }),
+            }
+          : source
+      }
+      style={style}
+    />
+  );
 }
 ```
 
@@ -256,96 +256,96 @@ import { useState } from 'react';
 import { StyleSheet, ImageProps, Image as RNImage, PixelRatio } from 'react-native';
 
 function extractStyleWidth(style?: ImageProps['style']) {
-	if (style) {
-		const { width } = StyleSheet.flatten(style);
+  if (style) {
+    const { width } = StyleSheet.flatten(style);
 
-		if (typeof width === 'number') {
-			return width;
-		}
-	}
+    if (typeof width === 'number') {
+      return width;
+    }
+  }
 }
 
 const config = {
-	deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-	imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+  deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+  imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
 };
 
 const SIZES = [...config.imageSizes, ...config.deviceSizes];
 
 function normalizeWidth(width: number) {
-	const calculatedSize = PixelRatio.getPixelSizeForLayoutSize(width);
-	const matchingIndex = SIZES.findIndex((size) => size >= calculatedSize);
-	
-	if (matchingIndex === -1) {
-		return SIZES[SIZES.length - 1];
-	} else if (matchingIndex === 0) {
-		return SIZES[0];
-	} else {
-		const left = SIZES[matchingIndex - 1];
-		const right = SIZES[matchingIndex];
+  const calculatedSize = PixelRatio.getPixelSizeForLayoutSize(width);
+  const matchingIndex = SIZES.findIndex((size) => size >= calculatedSize);
+  
+  if (matchingIndex === -1) {
+    return SIZES[SIZES.length - 1];
+  } else if (matchingIndex === 0) {
+    return SIZES[0];
+  } else {
+    const left = SIZES[matchingIndex - 1];
+    const right = SIZES[matchingIndex];
 
-		if ((left + right) / 2 > width) {
-			return left;
-		}
+    if ((left + right) / 2 > width) {
+      return left;
+    }
 
-		return right;
-	}
+    return right;
+  }
 }
 
 interface ImageLoaderConfig {
-	src: string;
-	width: number;
-	quality?: number;
+  src: string;
+  width: number;
+  quality?: number;
 }
 
 export function imageLoader({ src, width, quality }: ImageLoaderConfig) {
-	const url = new URL('/_next/image', process.env.NX_WEB_URL); // replace the env variable with the base URL of your Next.js frontend, e.g. 'https://example.com'
-	
-	url.searchParams.append('url', src);
-	url.searchParams.append('w', width.toString());
-	url.searchParams.append('q', String(quality || 75));
-	
-	return url.toString();
+  const url = new URL('/_next/image', process.env.NX_WEB_URL); // replace the env variable with the base URL of your Next.js frontend, e.g. 'https://example.com'
+  
+  url.searchParams.append('url', src);
+  url.searchParams.append('w', width.toString());
+  url.searchParams.append('q', String(quality || 75));
+  
+  return url.toString();
 }
 
 export interface Props extends ImageProps {
-	unoptimized?: boolean;
-	width?: number;
-	quality?: number;
+  unoptimized?: boolean;
+  width?: number;
+  quality?: number;
 }
 
 export function Image({ unoptimized, source, style, width, quality, onLayout, ...props }: Props) {
-	const staticWidth = extractStyleWidth(style) || width;
-	const [imageWidth, setImageWidth] = useState(staticWidth);
+  const staticWidth = extractStyleWidth(style) || width;
+  const [imageWidth, setImageWidth] = useState(staticWidth);
 
-	return (
-		<RNImage
-			{...props}
-			onLayout={(event) => {
-				if (onLayout) {
-					onLayout(event);
-				}
-		
-				if (!staticWidth) {
-					setImageWidth(event.nativeEvent.layout.width);
-				}
-			}}
-			source={
-				!unoptimized && typeof source === 'object' && 'uri' in source && source.uri
-					? {
-							...source,
-							uri: imageWidth
-								? imageLoader({
-									width: normalizeWidth(imageWidth),
-									src: source.uri,
-								})
-								: undefined,
-						}
-					: source
-			}
-			style={style}
-		/>
-	);
+  return (
+    <RNImage
+      {...props}
+      onLayout={(event) => {
+        if (onLayout) {
+          onLayout(event);
+        }
+    
+        if (!staticWidth) {
+          setImageWidth(event.nativeEvent.layout.width);
+        }
+      }}
+      source={
+        !unoptimized && typeof source === 'object' && 'uri' in source && source.uri
+          ? {
+              ...source,
+              uri: imageWidth
+                ? imageLoader({
+                  width: normalizeWidth(imageWidth),
+                  src: source.uri,
+                })
+                : undefined,
+            }
+          : source
+      }
+      style={style}
+    />
+  );
 }
 ```
 
@@ -361,127 +361,127 @@ import { PixelRatio, StyleSheet } from 'react-native';
 import FastImage, { FastImageProps, FastImageStaticProperties, Source } from 'react-native-fast-image';
 
 function extractStyleWidth(style?: FastImageProps['style']) {
-	if (style) {
-		const { width } = StyleSheet.flatten(style);
+  if (style) {
+    const { width } = StyleSheet.flatten(style);
 
-		if (typeof width === 'number') {
-			return width;
-		}
-	}
+    if (typeof width === 'number') {
+      return width;
+    }
+  }
 }
 
 const config = {
-	deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-	imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+  deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+  imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
 };
 
 const SIZES = [...config.imageSizes, ...config.deviceSizes];
 
 function normalizeWidth(width: number) {
-	const calculatedSize = PixelRatio.getPixelSizeForLayoutSize(width);
-	const matchingIndex = SIZES.findIndex((size) => size >= calculatedSize);
-	
-	if (matchingIndex === -1) {
-		return SIZES[SIZES.length - 1];
-	} else if (matchingIndex === 0) {
-		return SIZES[0];
-	} else {
-		const left = SIZES[matchingIndex - 1];
-		const right = SIZES[matchingIndex];
+  const calculatedSize = PixelRatio.getPixelSizeForLayoutSize(width);
+  const matchingIndex = SIZES.findIndex((size) => size >= calculatedSize);
+  
+  if (matchingIndex === -1) {
+    return SIZES[SIZES.length - 1];
+  } else if (matchingIndex === 0) {
+    return SIZES[0];
+  } else {
+    const left = SIZES[matchingIndex - 1];
+    const right = SIZES[matchingIndex];
 
-		if ((left + right) / 2 > width) {
-			return left;
-		}
+    if ((left + right) / 2 > width) {
+      return left;
+    }
 
-		return right;
-	}
+    return right;
+  }
 }
 
 interface ImageLoaderConfig {
-	src: string;
-	width: number;
-	quality?: number;
+  src: string;
+  width: number;
+  quality?: number;
 }
 
 export function imageLoader({ src, width, quality }: ImageLoaderConfig) {
-	const url = new URL('/_next/image', process.env.NX_WEB_URL); // replace the env variable with the base URL of your Next.js frontend, e.g. 'https://example.com'
-	
-	url.searchParams.append('url', src);
-	url.searchParams.append('w', width.toString());
-	url.searchParams.append('q', String(quality || 75));
-	
-	return url.toString();
+  const url = new URL('/_next/image', process.env.NX_WEB_URL); // replace the env variable with the base URL of your Next.js frontend, e.g. 'https://example.com'
+  
+  url.searchParams.append('url', src);
+  url.searchParams.append('w', width.toString());
+  url.searchParams.append('q', String(quality || 75));
+  
+  return url.toString();
 }
 
 export interface Props extends FastImageProps {
-	unoptimized?: boolean;
-	width?: number;
-	quality?: number;
+  unoptimized?: boolean;
+  width?: number;
+  quality?: number;
 }
 
 function OptimizedImage({ unoptimized, source, style, width, quality, onLayout, ...props }: Props) {
-	const staticWidth = extractStyleWidth(style) || width;
-	const [imageWidth, setImageWidth] = useState(staticWidth);
+  const staticWidth = extractStyleWidth(style) || width;
+  const [imageWidth, setImageWidth] = useState(staticWidth);
 
-	return (
-		<RNImage
-			{...props}
-			onLayout={(event) => {
-				if (onLayout) {
-					onLayout(event);
-				}
-		
-				if (!staticWidth) {
-					setImageWidth(event.nativeEvent.layout.width);
-				}
-			}}
-			source={
-				!unoptimized && typeof source === 'object' && 'uri' in source && source.uri
-					? {
-							...source,
-							uri: imageWidth
-								? imageLoader({
-									width: normalizeWidth(imageWidth),
-									src: source.uri,
-								})
-								: undefined,
-						}
-					: source
-			}
-			style={style}
-		/>
-	);
+  return (
+    <RNImage
+      {...props}
+      onLayout={(event) => {
+        if (onLayout) {
+          onLayout(event);
+        }
+    
+        if (!staticWidth) {
+          setImageWidth(event.nativeEvent.layout.width);
+        }
+      }}
+      source={
+        !unoptimized && typeof source === 'object' && 'uri' in source && source.uri
+          ? {
+              ...source,
+              uri: imageWidth
+                ? imageLoader({
+                  width: normalizeWidth(imageWidth),
+                  src: source.uri,
+                })
+                : undefined,
+            }
+          : source
+      }
+      style={style}
+    />
+  );
 }
 
 Object.getOwnPropertyNames(FastImage).forEach((prop) => {
-	if (!['$$typeof', 'render', 'displayName'].includes(prop)) {
-		// @ts-ignore
-		UntypedImage[prop] = FastImage[prop];
-	}
+  if (!['$$typeof', 'render', 'displayName'].includes(prop)) {
+    // @ts-ignore
+    UntypedImage[prop] = FastImage[prop];
+  }
 });
 
 type PreloadOptimized = (sources: (Source & { width?: number; uri: string })[]) => void;
 
 // Preload images using our loader when width is defined
 const preload: PreloadOptimized = (sources) => {
-	FastImage.preload(
-		sources.map(({ uri, width, ...rest }) => ({
-			...rest,
-			uri:
-				uri && width
-					? imageLoader({
-							width,
-							src: uri,
-						})
-					: uri,
-		}))
-	);
+  FastImage.preload(
+    sources.map(({ uri, width, ...rest }) => ({
+      ...rest,
+      uri:
+        uri && width
+          ? imageLoader({
+              width,
+              src: uri,
+            })
+          : uri,
+    }))
+  );
 };
 
 OptimizedImage.preload = preload;
 
 export const Image = OptimizedImage as React.FunctionComponent<Props> &
-	FastImageStaticProperties & {
-		preloadOptimized: PreloadOptimized;
-	};
+  FastImageStaticProperties & {
+    preloadOptimized: PreloadOptimized;
+  };
 ```
