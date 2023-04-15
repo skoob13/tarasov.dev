@@ -1,0 +1,487 @@
+---
+title: How to use Next.js Image Optimization in React Native Project
+seoTitle: How to use Next.js Image Optimization in React Native Project
+summary: React Native and Expo lack image optimization, requiring developers to find their own solutions for resizing and optimizing remote images. Next.js offers a solution for many projects, with built-in image optimization that can also be used on other platforms including React Native.
+publishedAt: 2023-04-15
+isPublished: true
+---
+
+React Native (or Expo) doesn't have image optimization, so developers should come up with their own solutions to scale, resize and optimize remote images. Next.js is a no-brainer solution for lots of projects which ships [image optimization](https://nextjs.org/docs/basic-features/image-optimization) by default. What is more important that you can use the same image loader to optimize any images on any platform including React Native as far as a platform implements a correct URL for the loader.
+
+## Implementing the image optimization loader in React Native
+
+If we take a look in the source code of the [image loader](https://github.com/vercel/next.js/blob/v13.3.0/packages/next/src/shared/lib/image-loader.ts), we'll find that it requires to know three parameters: image source, quality and width. The `width` param is the most trickiest one because sometimes developers don't define width intentionally, e.g. the simplest example is to fill the container:
+```typescript
+<View style={{ height: 200, borderRadius: 4, overflow: 'hidden' }}>
+  <Image source={{ uri: 'https://remote.origin/image.jpg' }} style={{ flex: 1 }} />
+</View>
+```
+You can either define static width or implement dynamic calculation using the `onLayout` function. But let's discuss the width problem later and implement the loader:
+```typescript
+interface ImageLoaderConfig {
+	src: string;
+	width: number;
+	quality?: number;
+}
+
+export function imageLoader({ src, width, quality }: ImageLoaderConfig) {
+	const url = new URL('/_next/image', process.env.NX_WEB_URL); // replace the env variable with the base URL of your Next.js frontend, e.g. 'https://example.com'
+	
+	url.searchParams.append('url', src);
+	url.searchParams.append('w', width.toString());
+	url.searchParams.append('q', String(quality || 75));
+	
+	return url.toString();
+}
+```
+
+That's actually it for the loader, but let's circle back to the width problem.
+
+### Using static width
+
+The most obvious solution is to mirror functionality from Next.js and define static width every time when we use `Image` component. You could also extract width from styles as well which solves a lot of cases by default:
+```typescript
+import { StyleSheet, ImageProps, Image as RNImage } from 'react-native';
+
+function extractStyleWidth(style?: ImageProps['style']) {
+	if (style) {
+		const { width } = StyleSheet.flatten(style);
+
+		if (typeof width === 'number') {
+			return width;
+		}
+	}
+}
+
+interface ImageLoaderConfig {
+	src: string;
+	width: number;
+	quality?: number;
+}
+
+export function imageLoader({ src, width, quality }: ImageLoaderConfig) {
+	const url = new URL('/_next/image', process.env.NX_WEB_URL); // replace the env variable with the base URL of your Next.js frontend, e.g. 'https://example.com'
+	
+	url.searchParams.append('url', src);
+	url.searchParams.append('w', width.toString());
+	url.searchParams.append('q', String(quality || 75));
+	
+	return url.toString();
+}
+
+export interface Props extends ImageProps {
+	unoptimized?: boolean;
+	width?: number;
+	quality?: number;
+}
+
+export function Image({ unoptimized, source, style, width, quality, ...props }: Props) {
+	const imageWidth = extractStyleWidth(style) || width;
+
+	return (
+		<RNImage
+			{...props}
+			source={
+				!unoptimized && typeof source === 'object' && 'uri' in source && source.uri && imageWidth
+					? {
+							...source,
+							uri: imageLoader({
+								quality,
+								width: imageWidth,
+								src: source.uri,
+							}),
+						}
+					: source
+			}
+			style={style}
+		/>
+	);
+}
+```
+
+However, if you test the code, it won't work as is. The one crucial part to mention that the image optimization endpoint from Next.js requires `width` to be equal to one of the values from the config of Next.js (`next.config.js`): 
+* `images.deviceSizes`  
+* `images.imageSizes`
+You can find default values for `deviceSizes` [here](https://nextjs.org/docs/api-reference/next/image#device-sizes) and for `imageSizes` [here](https://nextjs.org/docs/api-reference/next/image#image-sizes) or check your `next.config.js` file if it contains a similar configuration:
+```js
+module.exports = {
+	images: {
+		imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+		deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+	},
+};
+```
+So in order to make the loader work we have to extract a matching value from the arrays above:
+```ts
+const config = {
+	deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+	imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+};
+
+const SIZES = [...config.imageSizes, ...config.deviceSizes];
+
+function normalizeWidth(width: number) {
+	const calculatedSize = PixelRatio.getPixelSizeForLayoutSize(width);
+	const matchingIndex = SIZES.findIndex((size) => size >= calculatedSize);
+	
+	if (matchingIndex === -1) {
+		return SIZES[SIZES.length - 1];
+	} else if (matchingIndex === 0) {
+		return SIZES[0];
+	} else {
+		const left = SIZES[matchingIndex - 1];
+		const right = SIZES[matchingIndex];
+
+		if ((left + right) / 2 > width) {
+			return left;
+		}
+
+		return right;
+	}
+}
+```
+
+Since mobile applications define its size in points, we have to convert logical points to pixels using the built-in utility `PixelRatio.getPixelSizeForLayoutSize`. You could also redefine the way how the function takes the first matching value from the array to avoid downscaling. The function above "scales down" images which fall below the average of left and right boundaries, and because of that images could have visible artifacts. If you want to avoid this issue use a first matching value:
+```typescript
+const config = {
+	deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+	imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+};
+
+const SIZES = [...config.imageSizes, ...config.deviceSizes];
+
+function normalizeWidth(width: number) {
+	const calculatedSize = PixelRatio.getPixelSizeForLayoutSize(width);
+	const matchingSize = SIZES.find((size) => size >= calculatedSize);
+
+	// width is larger than the image loader can handle
+	if (matchingSize === -1) {
+		return SIZES[SIZES.length - 1];
+	}
+
+	return matchingSize;
+}
+```
+As a result, you'll get an optimized image component:
+```typescript
+import { StyleSheet, ImageProps, Image as RNImage, PixelRatio } from 'react-native';
+
+function extractStyleWidth(style?: ImageProps['style']) {
+	if (style) {
+		const { width } = StyleSheet.flatten(style);
+
+		if (typeof width === 'number') {
+			return width;
+		}
+	}
+}
+
+const config = {
+	deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+	imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+};
+
+const SIZES = [...config.imageSizes, ...config.deviceSizes];
+
+function normalizeWidth(width: number) {
+	const calculatedSize = PixelRatio.getPixelSizeForLayoutSize(width);
+	const matchingIndex = SIZES.findIndex((size) => size >= calculatedSize);
+	
+	if (matchingIndex === -1) {
+		return SIZES[SIZES.length - 1];
+	} else if (matchingIndex === 0) {
+		return SIZES[0];
+	} else {
+		const left = SIZES[matchingIndex - 1];
+		const right = SIZES[matchingIndex];
+
+		if ((left + right) / 2 > width) {
+			return left;
+		}
+
+		return right;
+	}
+}
+
+interface ImageLoaderConfig {
+	src: string;
+	width: number;
+	quality?: number;
+}
+
+export function imageLoader({ src, width, quality }: ImageLoaderConfig) {
+	const url = new URL('/_next/image', process.env.NX_WEB_URL); // replace the env variable with the base URL of your Next.js frontend, e.g. 'https://example.com'
+	
+	url.searchParams.append('url', src);
+	url.searchParams.append('w', width.toString());
+	url.searchParams.append('q', String(quality || 75));
+	
+	return url.toString();
+}
+
+export interface Props extends ImageProps {
+	unoptimized?: boolean;
+	width?: number;
+	quality?: number;
+}
+
+export function Image({ unoptimized, source, style, width, quality, ...props }: Props) {
+	const imageWidth = extractStyleWidth(style) || width;
+
+	return (
+		<RNImage
+			{...props}
+			source={
+				!unoptimized && typeof source === 'object' && 'uri' in source && source.uri && imageWidth
+					? {
+							...source,
+							uri: imageLoader({
+								quality,
+								width: imageWidth,
+								src: source.uri,
+							}),
+						}
+					: source
+			}
+			style={style}
+		/>
+	);
+}
+```
+
+### Using dynamic width
+Dynamic width will add a slightly noticeable delay because React Native has to measure layout firstly using the `onLayout` function and then rerender:
+```typescript
+import { useState } from 'react';
+import { StyleSheet, ImageProps, Image as RNImage, PixelRatio } from 'react-native';
+
+function extractStyleWidth(style?: ImageProps['style']) {
+	if (style) {
+		const { width } = StyleSheet.flatten(style);
+
+		if (typeof width === 'number') {
+			return width;
+		}
+	}
+}
+
+const config = {
+	deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+	imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+};
+
+const SIZES = [...config.imageSizes, ...config.deviceSizes];
+
+function normalizeWidth(width: number) {
+	const calculatedSize = PixelRatio.getPixelSizeForLayoutSize(width);
+	const matchingIndex = SIZES.findIndex((size) => size >= calculatedSize);
+	
+	if (matchingIndex === -1) {
+		return SIZES[SIZES.length - 1];
+	} else if (matchingIndex === 0) {
+		return SIZES[0];
+	} else {
+		const left = SIZES[matchingIndex - 1];
+		const right = SIZES[matchingIndex];
+
+		if ((left + right) / 2 > width) {
+			return left;
+		}
+
+		return right;
+	}
+}
+
+interface ImageLoaderConfig {
+	src: string;
+	width: number;
+	quality?: number;
+}
+
+export function imageLoader({ src, width, quality }: ImageLoaderConfig) {
+	const url = new URL('/_next/image', process.env.NX_WEB_URL); // replace the env variable with the base URL of your Next.js frontend, e.g. 'https://example.com'
+	
+	url.searchParams.append('url', src);
+	url.searchParams.append('w', width.toString());
+	url.searchParams.append('q', String(quality || 75));
+	
+	return url.toString();
+}
+
+export interface Props extends ImageProps {
+	unoptimized?: boolean;
+	width?: number;
+	quality?: number;
+}
+
+export function Image({ unoptimized, source, style, width, quality, onLayout, ...props }: Props) {
+	const staticWidth = extractStyleWidth(style) || width;
+	const [imageWidth, setImageWidth] = useState(staticWidth);
+
+	return (
+		<RNImage
+			{...props}
+			onLayout={(event) => {
+				if (onLayout) {
+					onLayout(event);
+				}
+		
+				if (!staticWidth) {
+					setImageWidth(event.nativeEvent.layout.width);
+				}
+			}}
+			source={
+				!unoptimized && typeof source === 'object' && 'uri' in source && source.uri
+					? {
+							...source,
+							uri: imageWidth
+								? imageLoader({
+									width: normalizeWidth(imageWidth),
+									src: source.uri,
+								})
+								: undefined,
+						}
+					: source
+			}
+			style={style}
+		/>
+	);
+}
+```
+
+That's it! Your image component uses the image optimization from Next.js now.
+
+
+### Bonus tip: making things work with `react-native-fast-image`
+
+[react-native-fast-image](https://github.com/DylanVann/react-native-fast-image) is a perfect addition to your React Native toolset. It allows to cache, prioritize loading, and preload images. The only thing that we need to adapt in our custom image component is static methods of FastImage:
+```typescript
+import { useState } from 'react';
+import { PixelRatio, StyleSheet } from 'react-native';
+import FastImage, { FastImageProps, FastImageStaticProperties, Source } from 'react-native-fast-image';
+
+function extractStyleWidth(style?: FastImageProps['style']) {
+	if (style) {
+		const { width } = StyleSheet.flatten(style);
+
+		if (typeof width === 'number') {
+			return width;
+		}
+	}
+}
+
+const config = {
+	deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+	imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+};
+
+const SIZES = [...config.imageSizes, ...config.deviceSizes];
+
+function normalizeWidth(width: number) {
+	const calculatedSize = PixelRatio.getPixelSizeForLayoutSize(width);
+	const matchingIndex = SIZES.findIndex((size) => size >= calculatedSize);
+	
+	if (matchingIndex === -1) {
+		return SIZES[SIZES.length - 1];
+	} else if (matchingIndex === 0) {
+		return SIZES[0];
+	} else {
+		const left = SIZES[matchingIndex - 1];
+		const right = SIZES[matchingIndex];
+
+		if ((left + right) / 2 > width) {
+			return left;
+		}
+
+		return right;
+	}
+}
+
+interface ImageLoaderConfig {
+	src: string;
+	width: number;
+	quality?: number;
+}
+
+export function imageLoader({ src, width, quality }: ImageLoaderConfig) {
+	const url = new URL('/_next/image', process.env.NX_WEB_URL); // replace the env variable with the base URL of your Next.js frontend, e.g. 'https://example.com'
+	
+	url.searchParams.append('url', src);
+	url.searchParams.append('w', width.toString());
+	url.searchParams.append('q', String(quality || 75));
+	
+	return url.toString();
+}
+
+export interface Props extends FastImageProps {
+	unoptimized?: boolean;
+	width?: number;
+	quality?: number;
+}
+
+function OptimizedImage({ unoptimized, source, style, width, quality, onLayout, ...props }: Props) {
+	const staticWidth = extractStyleWidth(style) || width;
+	const [imageWidth, setImageWidth] = useState(staticWidth);
+
+	return (
+		<RNImage
+			{...props}
+			onLayout={(event) => {
+				if (onLayout) {
+					onLayout(event);
+				}
+		
+				if (!staticWidth) {
+					setImageWidth(event.nativeEvent.layout.width);
+				}
+			}}
+			source={
+				!unoptimized && typeof source === 'object' && 'uri' in source && source.uri
+					? {
+							...source,
+							uri: imageWidth
+								? imageLoader({
+									width: normalizeWidth(imageWidth),
+									src: source.uri,
+								})
+								: undefined,
+						}
+					: source
+			}
+			style={style}
+		/>
+	);
+}
+
+Object.getOwnPropertyNames(FastImage).forEach((prop) => {
+	if (!['$$typeof', 'render', 'displayName'].includes(prop)) {
+		// @ts-ignore
+		UntypedImage[prop] = FastImage[prop];
+	}
+});
+
+type PreloadOptimized = (sources: (Source & { width?: number; uri: string })[]) => void;
+
+// Preload images using our loader when width is defined
+const preload: PreloadOptimized = (sources) => {
+	FastImage.preload(
+		sources.map(({ uri, width, ...rest }) => ({
+			...rest,
+			uri:
+				uri && width
+					? imageLoader({
+							width,
+							src: uri,
+						})
+					: uri,
+		}))
+	);
+};
+
+OptimizedImage.preload = preload;
+
+export const Image = OptimizedImage as React.FunctionComponent<Props> &
+	FastImageStaticProperties & {
+		preloadOptimized: PreloadOptimized;
+	};
+```
