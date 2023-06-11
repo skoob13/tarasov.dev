@@ -130,7 +130,9 @@ export default function Container({ children, image, ...customMeta }: Props) {
       </nav>
       <main className="flex-[1_0_auto] px-4">{children}</main>
       <footer className="flex items-center justify-between p-4 md:my-8">
-        <span className=" text-xs sm:text-sm">Created by Georgiy Tarasov in 2022</span>
+        <span className=" text-xs sm:text-sm" suppressHydrationWarning>
+          Created by Georgiy Tarasov in {new Date().getFullYear()}
+        </span>
         <ul className="flex items-center gap-2 sm:gap-4">
           <li>
             <ExternalLink href="https://twitter.com/anottoday" className="flex items-center">

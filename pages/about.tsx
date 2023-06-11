@@ -9,15 +9,20 @@ export default function AboutPage() {
         <h1 className="mt-8 mb-8 text-3xl font-bold tracking-tight md:text-6xl">About</h1>
         <h2 className="prose mb-8 dark:prose-dark sm:mb-16">
           I&rsquo;m a software developer, speciality coffee enthusiast, and a kinda entrepreneur. I work in{' '}
-          <ExternalLink href="https://ridgebox.com">Ridgebox.com</ExternalLink> as a Front-End Team Lead. In addition, I
-          work on my own products.
+          <ExternalLink href="https://hellosleuth.com">Sleuth</ExternalLink> as a Founding Engineer. In addition, I
+          bootstrap my own products.
         </h2>
         <h3 className="mb-4 text-xl font-bold tracking-tight md:text-3xl">Bio</h3>
         <p className="prose mb-2 dark:prose-dark">
-          I live in Zagreb, Croatia. Software development is my primary business and hobby. Currently I work in the
-          product accelerator company, so it provides a unique opportunity to work on variety of markets, e.g. fintech,
-          proptech, insurtech, sport, online education and other. During my career I have successfully developed and
-          launched 20+ products.
+          I live in Barcelona, Spain. Software development is both my primary business and hobby. Currently, I am
+          building Sleuth, which is a search engine for children&rsquo;s health information. The company aims to
+          displace WebMD and Dr. Google by creating the largest crowdsourced platform for real-world kids&rsquo; health
+          data.
+        </p>
+        <p className="prose mb-2 dark:prose-dark">
+          I used to work at a product accelerator company, which provided a unique opportunity to work across a variety
+          of markets, such as fintech, proptech, insurtech, sports, online education, and others. Throughout my career,
+          I have successfully developed and launched over 20 products.
         </p>
         <p className="prose mb-2 dark:prose-dark">
           In my spare time I enjoy contributing to open source projects, launching drones to sky, travelling around the
