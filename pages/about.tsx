@@ -8,9 +8,10 @@ export default function AboutPage() {
       <div className="flex flex-col items-start justify-center">
         <h1 className="mt-8 mb-8 text-3xl font-bold tracking-tight md:text-6xl">About</h1>
         <h2 className="prose mb-8 dark:prose-dark sm:mb-16">
-          I&rsquo;m a software developer, speciality coffee enthusiast, and a kinda entrepreneur. I work in{' '}
-          <ExternalLink href="https://hellosleuth.com">Sleuth</ExternalLink> as a Founding Engineer. In addition, I
-          bootstrap my own products.
+          I&rsquo;m a software developer, a speciality coffee enthusiast, and a kinda of an entrepreneur. I work at{' '}
+          <ExternalLink href="https://hellosleuth.com">Sleuth</ExternalLink> as a Founding Engineer. Additionaly, I
+          bootstrap my own products, leveraging my skills and resources to independently create and launch innovative
+          solutions.
         </h2>
         <h3 className="mb-4 text-xl font-bold tracking-tight md:text-3xl">Bio</h3>
         <p className="prose mb-2 dark:prose-dark">
