@@ -1,7 +1,10 @@
 ---
 import { Image } from 'astro:assets';
+import BlogCard from 'components/blog-card.astro';
 // import BlogCard from 'components/blog-card.astro';
 import MainLayout from 'layouts/main-layout.astro';
+import { getBlogPostPreviews } from 'lib/blog';
+import type { BlogFrontmatter } from 'types';
 
 interface Props {
   posts: { slug: string; title: string; readingTime: string; publishedAt: string }[];
@@ -32,6 +35,9 @@ const PROJECTS = [
     description: 'Find clues for child’s health',
   },
 ] as const;
+
+const posts = await Astro.glob<BlogFrontmatter>('content/blog/**/*.mdx');
+const lastPosts = getBlogPostPreviews(posts.slice(0, 3));
 ---
 
 <MainLayout>
@@ -43,7 +49,7 @@ const PROJECTS = [
     <div class="mb-16 w-full">
       <h2 class="mb-4 text-xl font-bold tracking-tight md:text-3xl">Writing</h2>
       <ul class="flex flex-col gap-2">
-        <!-- {posts.map((post) => <BlogCard key={post.slug} post={post} />)} -->
+        {lastPosts.map((post) => <BlogCard post={post} />)}
       </ul>
     </div>
     <div class="w-full">

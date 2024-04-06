@@ -1,10 +1,13 @@
-import { Blog } from 'contentlayer/generated';
-
-export interface BlogPost extends Blog {
-  publishedAtFormatted: string;
+export interface BlogFrontmatter {
+  title: string;
+  seoTitle: string;
+  summary: string;
+  publishedAt: string;
+  isPublished: boolean;
+  readingTime: string;
 }
 
-export interface SmallerBlogPost {
+export interface BlogPost {
   slug: string;
   title: string;
   readingTime: string;

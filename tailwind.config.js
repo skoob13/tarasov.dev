@@ -1,5 +1,13 @@
 const { spacing, fontFamily } = require('tailwindcss/defaultTheme');
 
+const round = (num) =>
+  num
+    .toFixed(7)
+    .replace(/(\.[0-9]+?)0+$/, '$1')
+    .replace(/\.0$/, '');
+const rem = (px) => `${round(px / 16)}rem`;
+const em = (px, base) => `${round(px / base)}em`;
+
 module.exports = {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
   darkMode: 'class',
@@ -29,10 +37,6 @@ module.exports = {
               border: `1px solid #e5e7eb`,
               'background-color': theme('colors.gray.100'),
             },
-            pre: {
-              'background-color': theme('colors.gray.50'),
-              border: `1px solid ${theme('colors.gray.200')}`,
-            },
             'code::before': {
               content: '',
             },
@@ -56,10 +60,6 @@ module.exports = {
             'code:not(.code-highlight)': {
               'border-color': theme('colors.gray.800'),
               'background-color': theme('colors.gray.900'),
-            },
-            pre: {
-              'background-color': theme('colors.gray.900'),
-              border: `1px solid ${theme('colors.gray.700')}`,
             },
             blockquote: {
               borderLeftColor: theme('colors.gray.700'),
