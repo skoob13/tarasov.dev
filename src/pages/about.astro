@@ -1,4 +1,5 @@
 ---
+import ExternalLink from 'components/external-link.astro';
 import Timeline from 'components/timeline.astro';
 import MainLayout from 'layouts/main-layout.astro';
 ---
@@ -31,8 +32,10 @@ import MainLayout from 'layouts/main-layout.astro';
       of mine is cars and racing.
     </p>
     <p class="prose mb-8 dark:prose-dark sm:mb-16">
-      I&rsquo;m a big fan of web technologies. By the way, this website was built using Next.js, React, and Tailwind
-      CSS.
+      I&rsquo;m a big fan of web technologies. By the way, this website was built using Astro, Tailwind, vanilla
+      JavaScript (transpilled TypeScript in fact), and hosted on Cloudflare Workers. You can find the source code on <ExternalLink
+        href="https://github.com/skoob13/tarasov.dev">Github.</ExternalLink
+      >
     </p>
     <h3 class="mb-4 text-xl font-bold tracking-tight md:text-3xl">Links</h3>
     <ul class="mb-8 flex flex-col gap-2 sm:mb-16">
