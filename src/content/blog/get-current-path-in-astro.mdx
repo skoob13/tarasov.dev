@@ -1,0 +1,33 @@
+---
+title: 'Get Current Path of a Page in Astro'
+seoTitle: 'Get Current URL of a Page in Astro'
+summary: 'TLDR: use Astro.url.pathname.'
+publishedAt: 2024-04-07
+isPublished: true
+---
+
+If you have a background in Next.js, you will probably want an alternative API to `router.asPath`. However, Astro doesn't really have a router, but it provides a similar API. To get a current page's pathname use the Astro's built-in global module `Astro.url`:
+
+```javascript
+const asPath = Astro.url.pathname;
+```
+
+### Bonus: building a canonical URL of a page in Astro
+
+In your `astro.config.mjs` set a base URL of your website, which will be set as an environment variable in `import.meta.env.SITE`:
+```javascript
+export default defineConfig({
+  site: 'https://tarasov.dev',
+});
+```
+
+Then you can use `Astro.url.pathname` in combination with `import.meta.env.SITE`:
+
+```javascript
+const canonicalUrl = new URL(Astro.url.pathname, import.meta.env.SITE).href;
+```
+
+For this page the code above evaluates to:
+```
+https://tarasov.dev/blog/get-current-path-in-astro
+```

@@ -29,7 +29,7 @@ const { Content } = await entry.render();
   <article class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center">
     <h1 class="mb-4 text-3xl font-bold tracking-tight md:text-5xl">{entry.data.title}</h1>
     <p class="mr-2 mt-2 text-sm text-gray-700 dark:text-gray-300">
-      {entry.data.publishedAt} / {formatReadingTime(entry.body)}
+      {formatPublishedAt(entry.data.publishedAt)} / {formatReadingTime(entry.body)}
     </p>
     <div class="prose mt-8 w-full max-w-none dark:prose-dark">
       <Content />
