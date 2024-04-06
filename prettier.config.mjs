@@ -1,5 +1,5 @@
-module.exports = {
-  plugins: [require('prettier-plugin-tailwindcss')],
+export default {
+  plugins: ['prettier-plugin-tailwindcss', 'prettier-plugin-astro'],
   printWidth: 120,
   tabWidth: 2,
   useTabs: false,

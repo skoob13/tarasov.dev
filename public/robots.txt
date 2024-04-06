@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://tarasov.dev
+
+# Sitemaps
+Sitemap: https://tarasov.dev/sitemap.xml
