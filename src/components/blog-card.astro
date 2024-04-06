@@ -1,20 +1,21 @@
 ---
-import type { BlogPost } from 'types';
-
 interface Props {
-  post: BlogPost;
+  slug: string;
+  title: string;
+  publishedAt: string;
+  readingTime: string;
 }
 
-const { post } = Astro.props;
+const { slug, title, publishedAt, readingTime } = Astro.props;
 ---
 
 <li>
   <a
     class="dark:highlight-white/5 grid grid-cols-[1fr_128px] gap-1 rounded-lg bg-gray-50 p-6 ring-gray-300 transition-all hover:ring-1 dark:bg-gray-800"
-    href={`/blog/${post.slug}`}
+    href={`/blog/${slug}`}
   >
     <h3 class="col-span-2 text-base font-semibold line-clamp-2 dark:text-gray-300 sm:col-auto sm:line-clamp-1">
-      {post.title}
+      {title}
     </h3>
     <figure class="col-start-2 row-start-2 flex items-center justify-end gap-1 sm:row-start-1">
       <svg
@@ -28,10 +29,10 @@ const { post } = Astro.props;
           d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
           clip-rule="evenodd"></path>
       </svg>
-      <figcaption class="text-base font-semibold dark:text-gray-300">{post.readingTime}</figcaption>
+      <figcaption class="text-base font-semibold dark:text-gray-300">{readingTime}</figcaption>
     </figure>
     <span class="row-start-2 flex items-center text-sm text-gray-500 dark:text-gray-400 sm:col-span-2">
-      Published on {post.publishedAt}
+      Published on {publishedAt}
     </span>
   </a>
 </li>

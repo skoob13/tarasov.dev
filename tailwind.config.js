@@ -1,4 +1,4 @@
-const { spacing, fontFamily } = require('tailwindcss/defaultTheme');
+import { fontFamily, spacing } from 'tailwindcss/defaultTheme';
 
 const round = (num) =>
   num

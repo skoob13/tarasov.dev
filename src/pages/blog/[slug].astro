@@ -1,36 +1,35 @@
 ---
 import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import { getCollection } from 'astro:content';
 import MainLayout from 'layouts/main-layout.astro';
-import { processBlogPost } from 'lib/blog';
-import type { BlogFrontmatter } from 'types';
+import { formatPublishedAt, formatReadingTime } from 'lib/blog';
 
 export const getStaticPaths = (async () => {
-  const mdxPosts = await Astro.glob<BlogFrontmatter>('content/blog/**/*.mdx');
-  return mdxPosts.map((mdxPost) => {
-    const post = processBlogPost(mdxPost);
+  const mdxPosts = await getCollection('blog', ({ data }) => data.isPublished);
+  return mdxPosts.map((entry) => {
     return {
       params: {
-        slug: post.slug,
+        slug: entry.slug,
       },
       props: {
-        post,
+        entry,
       },
     };
   });
 }) satisfies GetStaticPaths;
 
-type Props = InferGetStaticPropsType<typeof getStaticPaths>;
-const {
-  post: { Content, ...post },
-} = Astro.props;
+export type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
 ---
 
-<MainLayout title={`${post.title} – Georgiy Tarasov`} description={post.summary} image={post.image} type="article">
-  <meta slot="head" property="article:published_time" content={post.publishedAt} />
+<MainLayout title={`${entry.data.title} – Georgiy Tarasov`} description={entry.data.summary} type="article">
+  <meta slot="head" property="article:published_time" content={formatPublishedAt(entry.data.publishedAt)} />
   <article class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center">
-    <h1 class="mb-4 text-3xl font-bold tracking-tight md:text-5xl">{post.title}</h1>
+    <h1 class="mb-4 text-3xl font-bold tracking-tight md:text-5xl">{entry.data.title}</h1>
     <p class="mr-2 mt-2 text-sm text-gray-700 dark:text-gray-300">
-      {post.publishedAt} / {post.readingTime}
+      {entry.data.publishedAt} / {formatReadingTime(entry.body)}
     </p>
     <div class="prose mt-8 w-full max-w-none dark:prose-dark">
       <Content />

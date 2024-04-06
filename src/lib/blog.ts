@@ -1,7 +1,5 @@
-import type { MDXInstance } from 'astro';
-import { compareDesc, isSameYear, parseISO } from 'date-fns';
-
-import type { BlogFrontmatter, BlogPost } from 'types';
+import { compareDesc, isSameYear } from 'date-fns';
+import readingTime from 'reading-time';
 
 const formatter = new Intl.DateTimeFormat('en-GB', {
   month: 'long',
@@ -14,43 +12,14 @@ const formatterWithYear = new Intl.DateTimeFormat('en-GB', {
   year: 'numeric',
 });
 
-const formatDate = (date: string) => {
-  const publishedAt = parseISO(date);
+export const formatPublishedAt = (publishedAt: Date) => {
   return isSameYear(new Date(), publishedAt) ? formatter.format(publishedAt) : formatterWithYear.format(publishedAt);
 };
 
-function slugify(path: string) {
-  const segments = path.split('/');
-  const fileName = segments.pop();
-
-  if (!fileName) {
-    throw new Error('File name must be defined.');
-  }
-
-  return fileName.replace('.mdx', '');
+export function formatReadingTime(body: string) {
+  return readingTime(body).text;
 }
 
-function getBlogPostMeta(post: MDXInstance<BlogFrontmatter>): BlogPost {
-  return {
-    slug: slugify(post.file),
-    title: post.frontmatter.title,
-    readingTime: post.frontmatter.readingTime,
-    publishedAt: formatDate(post.frontmatter.publishedAt),
-  };
-}
-
-export function getBlogPostPreviews(allBlogs: MDXInstance<BlogFrontmatter>[]): BlogPost[] {
-  return allBlogs
-    .filter((blog) => blog.frontmatter.isPublished)
-    .sort((a, b) => compareDesc(parseISO(a.frontmatter.publishedAt), parseISO(b.frontmatter.publishedAt)))
-    .map(getBlogPostMeta);
-}
-
-export function processBlogPost(
-  post: MDXInstance<BlogFrontmatter>
-): BlogPost & { Content: MDXInstance<BlogFrontmatter>['Content'] } {
-  return {
-    ...getBlogPostMeta(post),
-    Content: post.Content,
-  };
+export function sortPosts<T extends { data: { publishedAt: Date } }>(posts: T[]): T[] {
+  return posts.sort((a, b) => compareDesc(a.data.publishedAt, b.data.publishedAt));
 }

@@ -1,11 +1,11 @@
 ---
+import { getCollection } from 'astro:content';
 import BlogCard from 'components/blog-card.astro';
 import MainLayout from 'layouts/main-layout.astro';
-import { getBlogPostPreviews } from 'lib/blog';
-import type { BlogFrontmatter } from 'types';
+import { formatPublishedAt, formatReadingTime, sortPosts } from 'lib/blog';
 
-const rawPosts = await Astro.glob<BlogFrontmatter>('content/blog/**/*.mdx');
-const posts = getBlogPostPreviews(rawPosts);
+const posts = await getCollection('blog', ({ data }) => data.isPublished);
+const sortedPosts = sortPosts(posts);
 ---
 
 <MainLayout>
@@ -17,7 +17,16 @@ const posts = getBlogPostPreviews(rawPosts);
     </h2>
     <div class="mb-16 w-full">
       <ul class="flex flex-col gap-2">
-        {posts.map((post) => <BlogCard post={post} />)}
+        {
+          sortedPosts.map((post) => (
+            <BlogCard
+              title={post.data.title}
+              slug={post.slug}
+              readingTime={formatReadingTime(post.body)}
+              publishedAt={formatPublishedAt(post.data.publishedAt)}
+            />
+          ))
+        }
       </ul>
     </div>
   </div>

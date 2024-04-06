@@ -1,4 +1,5 @@
 import mdx from "@astrojs/mdx";
+import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 import { defineConfig } from 'astro/config';
 import readingTime from 'reading-time';
@@ -7,34 +8,25 @@ import rehypeCodeTitles from 'rehype-code-titles';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 
-import { remarkReadingTime } from './plugins/remark-reading-time.mjs';
-
+// https://astro.build/config
 export default defineConfig({
-  site: 'https://www.tarasov.dev',
-  integrations: [tailwind(), mdx()],
+  site: 'https://tarasov.dev',
+  integrations: [tailwind(), mdx(), sitemap()],
+  trailingSlash: 'never',
   markdown: {
-    remarkPlugins: [remarkGfm, remarkReadingTime],
-    rehypePlugins: [
-      rehypeSlug,
-      rehypeCodeTitles,
-      [
-        rehypeAutolinkHeadings,
-        {
-          properties: {
-            className: ['anchor'],
-          },
-        },
-      ],
-    ],
+    remarkPlugins: [remarkGfm],
+    rehypePlugins: [rehypeSlug, rehypeCodeTitles, [rehypeAutolinkHeadings, {
+      properties: {
+        className: ['anchor']
+      }
+    }]],
     shikiConfig: {
       theme: 'dracula-soft',
-      transformers: [
-        {
-          pre(node) {
-            this.addClassToHast(node, 'not-prose')
-          },
+      transformers: [{
+        pre(node) {
+          this.addClassToHast(node, 'not-prose');
         }
-      ]
-    },
-  },
+      }]
+    }
+  }
 });

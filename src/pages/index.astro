@@ -1,10 +1,9 @@
 ---
 import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import BlogCard from 'components/blog-card.astro';
-// import BlogCard from 'components/blog-card.astro';
 import MainLayout from 'layouts/main-layout.astro';
-import { getBlogPostPreviews } from 'lib/blog';
-import type { BlogFrontmatter } from 'types';
+import { formatPublishedAt, formatReadingTime, sortPosts } from 'lib/blog';
 
 interface Props {
   posts: { slug: string; title: string; readingTime: string; publishedAt: string }[];
@@ -36,8 +35,8 @@ const PROJECTS = [
   },
 ] as const;
 
-const posts = await Astro.glob<BlogFrontmatter>('content/blog/**/*.mdx');
-const lastPosts = getBlogPostPreviews(posts.slice(0, 3));
+const posts = await getCollection('blog', ({ data }) => data.isPublished);
+const sortedPosts = sortPosts(posts.slice(0, 3));
 ---
 
 <MainLayout>
@@ -49,7 +48,16 @@ const lastPosts = getBlogPostPreviews(posts.slice(0, 3));
     <div class="mb-16 w-full">
       <h2 class="mb-4 text-xl font-bold tracking-tight md:text-3xl">Writing</h2>
       <ul class="flex flex-col gap-2">
-        {lastPosts.map((post) => <BlogCard post={post} />)}
+        {
+          sortedPosts.map((post) => (
+            <BlogCard
+              title={post.data.title}
+              slug={post.slug}
+              readingTime={formatReadingTime(post.body)}
+              publishedAt={formatPublishedAt(post.data.publishedAt)}
+            />
+          ))
+        }
       </ul>
     </div>
     <div class="w-full">

@@ -31,14 +31,7 @@ html {
   @apply sticky top-4 z-10 mx-2 rounded-full;
 }
 
-@media screen(md) {
-  .sticky-nav {
-    @apply mx-0;
-  }
-}
-
 .prose img {
-  /* Don't apply styles to next/image */
   @apply m-0;
 }
 
@@ -70,4 +63,10 @@ input[type='email'] {
 
 .crossed {
   text-decoration: line-through;
+}
+
+@media screen(md) {
+  .sticky-nav {
+    @apply mx-0;
+  }
 }
