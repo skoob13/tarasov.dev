@@ -1,16 +1,15 @@
 ---
-import Container from 'components/container';
-import ExternalLink from 'components/external-link';
-import Timeline from 'components/timeline';
+import Timeline from 'components/timeline.astro';
+import MainLayout from 'layouts/main-layout.astro';
 ---
 
-<Container>
+<MainLayout title="About Georgiy Tarasov">
   <div class="flex flex-col items-start justify-center">
     <h1 class="mt-8 mb-8 text-3xl font-bold tracking-tight md:text-6xl">About</h1>
     <h2 class="prose mb-8 dark:prose-dark sm:mb-16">
       I&rsquo;m a software developer, a speciality coffee enthusiast, and a kinda of an entrepreneur. I work at{' '}
-      <ExternalLink href="https://hellosleuth.com">Sleuth</ExternalLink> as a Founding Engineer. Additionaly, I bootstrap
-      my own products, leveraging my skills and resources to independently create and launch innovative solutions.
+      <a href="https://hellosleuth.com" target="_blank">Sleuth</a> as a Founding Engineer. Additionaly, I bootstrap my own
+      products, leveraging my skills and resources to independently create and launch innovative solutions.
     </h2>
     <h3 class="mb-4 text-xl font-bold tracking-tight md:text-3xl">Bio</h3>
     <p class="prose mb-2 dark:prose-dark">
@@ -25,8 +24,8 @@ import Timeline from 'components/timeline';
     </p>
     <p class="prose mb-2 dark:prose-dark">
       In my spare time I enjoy contributing to open source projects, launching drones to sky, travelling around the
-      world, doing a <ExternalLink href="https://en.wikipedia.org/wiki/Nosework">nosework</ExternalLink> with my dog. Another
-      passion of mine is cars and racing.
+      world, doing a <a target="_blank" href="https://en.wikipedia.org/wiki/Nosework">nosework</a> with my dog. Another passion
+      of mine is cars and racing.
     </p>
     <p class="prose mb-8 dark:prose-dark sm:mb-16">
       I&rsquo;m a big fan of web technologies. By the way, this website was built using Next.js, React, and Tailwind
@@ -35,19 +34,19 @@ import Timeline from 'components/timeline';
     <h3 class="mb-4 text-xl font-bold tracking-tight md:text-3xl">Links</h3>
     <ul class="mb-8 flex flex-col gap-2 sm:mb-16">
       <li class="prose dark:prose-dark">
-        📸 <ExternalLink href="https://instagram.com/tarasovg">instagram</ExternalLink>
+        📸 <a target="_blank" href="https://instagram.com/tarasovg">instagram</a>
       </li>
       <li class="prose dark:prose-dark">
-        👨‍💻 <ExternalLink href="https://github.com/skoob13">github</ExternalLink>
+        👨‍💻 <a target="_blank" href="https://github.com/skoob13">github</a>
       </li>
       <li class="prose dark:prose-dark">
-        📝 <ExternalLink href="https://twitter.com/anottoday">twitter</ExternalLink>
+        📝 <a target="_blank" href="https://twitter.com/anottoday">twitter</a>
       </li>
       <li class="prose dark:prose-dark">
-        📧 <ExternalLink href="mailto:gtarasov.work@gmail.com">email</ExternalLink>
+        📧 <a target="_blank" href="mailto:gtarasov.work@gmail.com">email</a>
       </li>
     </ul>
     <h3 class="mb-4 text-xl font-bold tracking-tight md:text-3xl">Timeline</h3>
     <Timeline />
   </div>
-</Container>
+</MainLayout>
