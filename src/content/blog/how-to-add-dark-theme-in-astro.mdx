@@ -1,0 +1,77 @@
+---
+title: 'How to add a dark theme in Astro with Tailwind'
+seoTitle: 'How to add a dark theme in Astro with Tailwind'
+summary: 'Learn how you can implement a light and dark theme and a theme selector button in Astro using vanilla JavaScript without a flash of unstyled content.'
+publishedAt: 2024-04-06
+isPublished: true
+---
+
+You want to add a light/dark theme to your Astro project with Tailwind? It's quite easy and all you need is a plain Javascript script. I will describe a Tailwind's theming approach through a class, but you can adjust the code for other use cases too.
+
+## Apply theme without FOUC
+
+[Flash of Unstyled Content](https://en.wikipedia.org/wiki/Flash_of_unstyled_content) is a common problem in theming. Sometimes you can see how the default theme applies firsly, usually a light theme, switching to a dark theme, blinking, and making the UI to look ugly for a moment. In Astro, you can implement a script in `<head>` which checks, if the theme has been applied previously. This website applies this script in the main layout.
+
+```astro
+---
+---
+<html class="dark">
+  <head>
+    <script>
+      if (
+        localStorage.theme === 'dark' ||
+        (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+      ) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
+```
+
+Since Astro transpiles scripts that you put in `script` tags, we won't be bothered by checking [Can I Use](https://caniuse.com).
+
+## Implement a theme switcher button
+
+Next, we're going to implement a button for switching themes. As you may guess you only need to save a newly selected theme to a local storage and switch the class of the `<html>` element.
+
+```astro
+---
+---
+<button type="button" id="theme-selector">
+  <span class="sr-only">Enable <span class="dark:hidden">light</span><span class="hidden dark:inline">dark</span> mode</span>
+  <svg class="hidden dark:inline">
+    <-- dark icon -->
+  <svg class="dark:hidden">
+    <-- light icon -->
+  </svg>
+</button>
+
+<script>
+  document.getElementById('theme-selector')?.addEventListener('click', () => {
+    if (localStorage.theme === 'dark') {
+      localStorage.theme = 'light';
+      document.documentElement.classList.remove('dark');
+    } else {
+      localStorage.theme = 'dark';
+      document.documentElement.classList.add('dark');
+    }
+  });
+</script>
+```
+
+If you want to modify UI to show a block in the light mode only use this class:
+```html
+<span class="dark:hidden"></span>
+```
+
+And vice-versa, if you want to show an element only in the dark mode use this class:
+```html
+<span class="hidden dark:inline"></span>
+```
+
+That's it! Check [the source code](https://github.com/skoob13/tarasov.dev) of my website to see implementation. If you want to see it in action, just switch a theme.

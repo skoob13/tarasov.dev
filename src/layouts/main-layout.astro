@@ -5,20 +5,16 @@ import { Image } from 'astro:assets';
 import ExternalLink from 'components/external-link.astro';
 
 interface Props {
-  title?: string;
-  description?: string;
+  title: string;
+  description: string;
   image?: string;
   type?: string;
 }
 
 const { image, ...customMeta } = Astro.props;
 
-const DOMAIN = process.env.ASTRO_PUBLIC_DOMAIN;
-
 const meta = {
-  title: 'Georgiy Tarasov – developer, creator, entrepreneur.',
-  description: `Georgii is a software developer, speciality coffee enthusiast, and a kinda entrepreneur. I work in Ridgebox.com and do bootstrapped business.`,
-  image: `${DOMAIN}/${image || 'og-banner.jpg'}`,
+  image: new URL(image || 'og-banner.jpg', import.meta.env.SITE).href,
   type: 'website',
   ...customMeta,
 };
