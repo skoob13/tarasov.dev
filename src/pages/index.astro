@@ -39,7 +39,10 @@ const posts = await getCollection('blog', ({ data }) => data.isPublished);
 const sortedPosts = sortPosts(posts.slice(0, 3));
 ---
 
-<MainLayout>
+<MainLayout
+  title="Georgiy Tarasov – developer, creator, entrepreneur."
+  description="Georgiy is a software engineer and has worked at Sleuth and Ridgebox."
+>
   <div class="mb-16 flex flex-col items-start justify-center">
     <h1 class="mt-8 mb-16 text-3xl font-bold tracking-tight md:text-6xl">
       <span class="text-sky-600">Hello!</span>
