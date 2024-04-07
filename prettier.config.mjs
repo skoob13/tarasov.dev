@@ -1,5 +1,5 @@
+/** @type {import('prettier').Config} */
 export default {
-  plugins: ['prettier-plugin-tailwindcss', 'prettier-plugin-astro'],
   printWidth: 120,
   tabWidth: 2,
   useTabs: false,
@@ -11,4 +11,14 @@ export default {
   bracketSameLine: false,
   arrowParens: 'always',
   singleQuote: true,
+  plugins: ['prettier-plugin-astro', 'prettier-plugin-tailwindcss'],
+  tailwindConfig: './tailwind.config.mjs',
+  overrides: [
+    {
+      files: '*.astro',
+      options: {
+        parser: 'astro',
+      },
+    },
+  ],
 };
