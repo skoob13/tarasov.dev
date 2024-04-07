@@ -21,8 +21,8 @@ const meta = {
 
 let canonicalUrl = new URL(Astro.url.pathname, import.meta.env.SITE).href;
 
-if (canonicalUrl.endsWith('/')) {
-  canonicalUrl = canonicalUrl.slice(0, canonicalUrl.length - 1);
+if (!canonicalUrl.endsWith('/')) {
+  canonicalUrl = canonicalUrl + '/';
 }
 ---
 
