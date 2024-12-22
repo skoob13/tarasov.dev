@@ -1,8 +1,8 @@
+import cloudflare from '@astrojs/cloudflare';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
 import { defineConfig } from 'astro/config';
-import readingTime from 'reading-time';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeCodeTitles from 'rehype-code-titles';
 import rehypeSlug from 'rehype-slug';
@@ -13,6 +13,7 @@ export default defineConfig({
   site: 'https://tarasov.dev',
   integrations: [tailwind(), mdx(), sitemap()],
   trailingSlash: 'always',
+
   markdown: {
     remarkPlugins: [remarkGfm],
     rehypePlugins: [
@@ -38,4 +39,14 @@ export default defineConfig({
       ],
     },
   },
+
+  vite: {
+    ssr: {
+      external: ['node:stream'],
+    },
+  },
+
+  adapter: cloudflare({
+    imageService: 'cloudflare',
+  }),
 });
