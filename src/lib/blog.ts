@@ -16,7 +16,7 @@ export const formatPublishedAt = (publishedAt: Date) => {
 };
 
 export function formatReadingTime(_: string) {
-  return '1 min read';
+  return '';
 }
 
 export function sortPosts<T extends { data: { publishedAt: Date } }>(posts: T[]): T[] {
