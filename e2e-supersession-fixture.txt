@@ -1,0 +1,2 @@
+Synthetic PR handover fixture: old.
+Run: supersession-20260915.
