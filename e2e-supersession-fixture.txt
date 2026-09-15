@@ -1,2 +1,1 @@
-Synthetic PR handover fixture: old.
-Run: supersession-rebased-20260915.
+Synthetic human edit for human_push_after_research: dc7b1ea7-46b6-417c-ba19-015c1668e090
