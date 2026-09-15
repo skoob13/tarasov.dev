@@ -61,10 +61,7 @@ if (!canonicalUrl.endsWith('/')) {
     <meta content="#ffffff" name="msapplication-TileColor" />
     <slot name="head" />
     <script is:inline>
-      if (
-        localStorage.theme === 'dark' ||
-        (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
-      ) {
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
         document.documentElement.classList.add('dark');
       } else {
         document.documentElement.classList.remove('dark');
@@ -137,13 +134,7 @@ if (!canonicalUrl.endsWith('/')) {
           </button>
           <script>
             document.getElementById('theme-selector')?.addEventListener('click', () => {
-              if (localStorage.theme === 'dark') {
-                localStorage.theme = 'light';
-                document.documentElement.classList.remove('dark');
-              } else {
-                localStorage.theme = 'dark';
-                document.documentElement.classList.add('dark');
-              }
+              document.documentElement.classList.toggle('dark');
             });
           </script>
         </li>
