@@ -1,0 +1,2 @@
+Synthetic PR handover fixture: third.
+Run: supersession-rebased-20260915.
