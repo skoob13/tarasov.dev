@@ -137,7 +137,7 @@ if (!canonicalUrl.endsWith('/')) {
           </button>
           <script>
             document.getElementById('theme-selector')?.addEventListener('click', () => {
-              if (localStorage.theme === 'dark') {
+              if (document.documentElement.classList.contains('dark')) {
                 localStorage.theme = 'light';
                 document.documentElement.classList.remove('dark');
               } else {
